@@ -11,9 +11,9 @@ function	Meta(): ReactElement {
 				<meta httpEquiv={'X-UA-Compatible'} content={'IE=edge'} />
 				<meta name={'viewport'} content={'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover'} />
 				<meta name={'description'} content={meta.name} />
-				<meta name={'git-url'} content={meta.github} />
 				<meta name={'msapplication-TileColor'} content={meta.title_color} />
 				<meta name={'theme-color'} content={meta.theme_color} />
+				<meta name={'git-url'} content={meta.github} />
 
 				<meta name={'application-name'} content={meta.name} />
 				<meta name={'apple-mobile-web-app-title'} content={meta.name} />
@@ -29,7 +29,6 @@ function	Meta(): ReactElement {
 					rel={'mask-icon'}
 					href={'/favicons/safari-pinned-tab.svg'}
 					color={meta.theme_color} />
-
 				<link
 					rel={'shortcut icon'}
 					type={'image/x-icon'}
@@ -48,7 +47,7 @@ function	Meta(): ReactElement {
 					rel={'icon'}
 					type={'image/png'}
 					sizes={'512x512'}
-					href={'/favicons/favicon-512x512.png'} />
+					href={'/favicons/android-icon-512x512.png'} />
 				<link
 					rel={'icon'}
 					type={'image/png'}
@@ -72,7 +71,6 @@ function	Meta(): ReactElement {
 					rel={'apple-touch-icon'}
 					sizes={'167x167'}
 					href={'/favicons/apple-icon-167x167.png'} />
-
 
 				<meta name={'robots'} content={'index,nofollow'} />
 				<meta name={'googlebot'} content={'index,nofollow'} />

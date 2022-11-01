@@ -1,58 +1,100 @@
 /* This will load Tailwindcss + all the overwrite from Yearn lib */
 @import '@yearn-finance/web-lib/style.next.css';
 
+
 :root {
-	& .project--kbar-wrapper {
-		@apply rounded-default opacity-60 bg-neutral-300/70 hover:bg-neutral-300 transition-colors;
+	& .yveCRV--nav-link {
+		@apply relative cursor-pointer transition-colors text-neutral-500 hover:text-neutral-900 font-normal;
+		
+		&.active {
+			@apply text-neutral-900 font-bold;
+		}
+	}
+	& .yveCRV--dropdown-menu {
+		--dropdown-bg-color: hsl(var(--color-neutral-300));
+		--dropdown-bg-color-active: hsl(var(--color-neutral-600));
+		--dropdown-border-width: 0px;
+		--dropdown-border-color: transparent;
+
+		@apply flex overflow-y-auto absolute left-0 flex-col mt-1 w-full min-w-fit max-h-60 scrollbar-none text-neutral-400 border border-neutral-300 bg-neutral-200;
+	}
+	& .yveCRV--dropdown-menu-item {
+		@apply w-full flex flex-row items-center cursor-pointer py-2 pr-4 pl-3 transition-colors;
+		&[data-active="true"] {
+			@apply bg-neutral-100;
+		}
+	}
+	& .mobile-nav-item {
+		@apply flex flex-col items-start justify-between rounded bg-good-ol-grey-100;
+		& > p {
+			@apply p-2 text-base font-bold text-neutral-900;
+		}
+	}
+	& .yearn--button-smaller {
+		@apply h-8 text-xs py-2 w-22 px-2;
 	}
 }
 
-:root.dark {
-	& .project--kbar-wrapper {
-		@apply rounded-default opacity-60 bg-neutral-100/70 hover:bg-neutral-100 transition-colors;
-	}
+
+
+.wordWrapper {
+	display: inline-block;
+	vertical-align: top;
+	margin: 0;
+}
+.word {
+	@apply absolute text-neutral-900 font-bold text-5xl md:text-8xl uppercase text-center flex justify-center items-center w-[300px] md:w-[600px];
+	opacity: 0;
+}
+.wordLeft {
+	@apply absolute text-left flex justify-start items-center;
+	opacity: 0;
+}
+.letter {
+	display: inline-block;
+	position: relative;
+	float: left;
+	transform: translateZ(25px);
+	transform-origin: 50% 50% 25px;
+}
+.letter.out {
+	transform: rotateX(90deg);
+	transition: transform 0.32s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+.letter.behind {
+	transform: rotateX(-90deg);
+}
+.letter.in {
+	transform: rotateX(0deg);
+	transition: transform 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 [type='text']:focus, [type='email']:focus, [type='url']:focus, [type='password']:focus, [type='number']:focus, [type='date']:focus, [type='datetime-local']:focus, [type='month']:focus, [type='search']:focus, [type='tel']:focus, [type='time']:focus, [type='week']:focus, [multiple]:focus, textarea:focus, select:focus {
-    outline: unset;
-    outline-offset: unset;
-    box-shadow: unset;
-    border-color: unset;
+	outline: none;
+	box-shadow: none;
 }
 
-
-.yearn--select-reset {
-	@apply bg-transparent p-0 border-none;
-	&:focus {
-		outline: none;
-		box-shadow: none;
-	}
-}
-.yearn--select-no-arrow {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	background-image: none;
-}
-.yearn--select-no-arrow::-ms-expand {
-    display: none;
+.loader {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 16px 0 #fff, -16px 0 #fff;
+  position: relative;
+  animation: flash 1s ease-out infinite alternate;
 }
 
-.yearn--input {
-	@apply rounded-default w-full border-0 border-b-2 border-transparent bg-neutral-100 mt-1 text-neutral-900 focus:ring-0 transition-colors pr-10 h-10;
-	&[data-focused='true'] {
-		@apply bg-neutral-200 border-primary-500 transition-colors;
-		& ~ .yearn--input-caption {
-			@apply text-primary-500;
-		}
-	}
-	&[aria-invalid="true"] {
-		@apply border-red-900;
-	}
-	& > input {
-		@apply w-full border-0 bg-transparent text-neutral-900 focus:ring-0 h-10 p-2;
-	}
-
-	& ~ .yearn--input-caption {
-		@apply mt-1 pl-2 text-xs transition-colors text-neutral-600
-	}
+@keyframes flash {
+  0% {
+    background-color: #FFF2;
+    box-shadow: 12px 0 #FFF2, -12px 0 #FFF;
+  }
+  50% {
+    background-color: #FFF;
+    box-shadow: 12px 0 #FFF2, -12px 0 #FFF2;
+  }
+  100% {
+    background-color: #FFF2;
+    box-shadow: 12px 0 #FFF, -12px 0 #FFF2;
+  }
 }

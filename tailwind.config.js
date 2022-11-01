@@ -20,6 +20,24 @@ module.exports = {
 			fontFamily: {
 				aeonik: ['Aeonik', ...defaultTheme.fontFamily.sans],
 				mono: ['Aeonik Mono', ...defaultTheme.fontFamily.mono]
+			},
+			width: {
+				'22': '5.5rem'
+			},
+			height: {
+				'inherit': 'inherit'
+			},
+			screens: {
+				'lg': '1200px'
+			},
+			gridTemplateColumns: {
+				'13': 'repeat(13, minmax(0, 1fr))',
+				'14': 'repeat(14, minmax(0, 1fr))'
+			},
+			fontSize: {
+				'3xl': ['32px', '40px'],
+				'7xl': ['64px', '72px'],
+				'8xl': ['88px', '104px']
 			}
 		}
 	},
