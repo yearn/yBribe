@@ -1,0 +1,58 @@
+/* This will load Tailwindcss + all the overwrite from Yearn lib */
+@import '@yearn-finance/web-lib/style.next.css';
+
+:root {
+	& .project--kbar-wrapper {
+		@apply rounded-default opacity-60 bg-neutral-300/70 hover:bg-neutral-300 transition-colors;
+	}
+}
+
+:root.dark {
+	& .project--kbar-wrapper {
+		@apply rounded-default opacity-60 bg-neutral-100/70 hover:bg-neutral-100 transition-colors;
+	}
+}
+
+[type='text']:focus, [type='email']:focus, [type='url']:focus, [type='password']:focus, [type='number']:focus, [type='date']:focus, [type='datetime-local']:focus, [type='month']:focus, [type='search']:focus, [type='tel']:focus, [type='time']:focus, [type='week']:focus, [multiple]:focus, textarea:focus, select:focus {
+    outline: unset;
+    outline-offset: unset;
+    box-shadow: unset;
+    border-color: unset;
+}
+
+
+.yearn--select-reset {
+	@apply bg-transparent p-0 border-none;
+	&:focus {
+		outline: none;
+		box-shadow: none;
+	}
+}
+.yearn--select-no-arrow {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background-image: none;
+}
+.yearn--select-no-arrow::-ms-expand {
+    display: none;
+}
+
+.yearn--input {
+	@apply rounded-default w-full border-0 border-b-2 border-transparent bg-neutral-100 mt-1 text-neutral-900 focus:ring-0 transition-colors pr-10 h-10;
+	&[data-focused='true'] {
+		@apply bg-neutral-200 border-primary-500 transition-colors;
+		& ~ .yearn--input-caption {
+			@apply text-primary-500;
+		}
+	}
+	&[aria-invalid="true"] {
+		@apply border-red-900;
+	}
+	& > input {
+		@apply w-full border-0 bg-transparent text-neutral-900 focus:ring-0 h-10 p-2;
+	}
+
+	& ~ .yearn--input-caption {
+		@apply mt-1 pl-2 text-xs transition-colors text-neutral-600
+	}
+}
