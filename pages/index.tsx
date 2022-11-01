@@ -92,8 +92,8 @@ function	GaugeList(): ReactElement {
 						}} />
 					{sortedGauges.length === 0 ? (
 						<div className={'flex h-96 w-full flex-col items-center justify-center py-2 px-10'}>
-							<b className={'text-lg'}>{'Andre\'s Fault'}</b>
-							<p className={'text-neutral-600'}>{'No vaults available. What a shame. What are the dev doing. Bouuuuuh.'}</p>
+							<b className={'text-lg'}>{'No Gauges'}</b>
+							<p className={'text-neutral-600'}>{'No Gauges available. What a shame. What are the dev doing. Bouuuuuh.'}</p>
 
 						</div>
 					) : sortedGauges.map((gauge): ReactNode => {
@@ -167,14 +167,14 @@ function	Index(): ReactElement {
 					</p>
 				</div>
 				<div className={'flex flex-row items-center justify-center space-x-10'}>
-					<Link href={'/about'}>
+					<Link href={'/'}>
 						<Button className={'w-full'}>
-							{'Offer Bribe'}
+							{'Claim Bribe'}
 						</Button>
 					</Link>
-					<Link href={'/about'}>
+					<Link href={'/offer-bribe'}>
 						<Button className={'w-full'}>
-							{'Vote for Bribe'}
+							{'Offer Bribe'}
 						</Button>
 					</Link>
 				</div>

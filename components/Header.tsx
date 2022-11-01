@@ -30,27 +30,12 @@ function	Header(): ReactElement {
 				<nav className={'col-s hidden w-1/3 flex-row items-center space-x-3 md:flex md:space-x-6'}>
 					<Link href={'/'}>
 						<p className={`yveCRV--nav-link ${router.pathname === '/' ? 'active' : '' }`}>
-							{'Main'}
+							{'Claim Bribe'}
 						</p>
 					</Link>
-					{/* <Link href={'/new-vaults'}>
-						<p className={`yveCRV--nav-link ${router.pathname === '/new-vaults' ? 'active' : '' }`}>
-							{'New Vaults'}
-						</p>
-					</Link> */}
-					{/* <Link href={'/vote'}>
-						<p className={`yveCRV--nav-link ${router.pathname === '/vote' ? 'active' : '' }`}>
-							{'Vote'}
-						</p>
-					</Link> */}
-					<Link href={'/holdings'}>
-						<p className={`yveCRV--nav-link ${router.pathname === '/holdings' ? 'active' : '' }`}>
-							{'Holdings'}
-						</p>
-					</Link>
-					<Link href={'/about'}>
-						<p className={`yveCRV--nav-link ${router.pathname === '/about' ? 'active' : '' }`}>
-							{'About'}
+					<Link href={'/offer-bribe'}>
+						<p className={`yveCRV--nav-link ${router.pathname === '/offer-bribe' ? 'active' : '' }`}>
+							{'Offer Bribe'}
 						</p>
 					</Link>
 				</nav>
@@ -102,38 +87,18 @@ function	Header(): ReactElement {
 				<Link href={'/'}>
 					<div className={'mobile-nav-item'} onClick={(): void => set_hasMobileMenu(false)}>
 						<p className={'font-bold'}>
-							{'Home'}
+							{'Claim Bribe'}
 						</p>
 					</div>
 				</Link>
-				{/* <Link href={'/new-vaults'}>
+				<Link href={'/offer-bribe'}>
 					<div className={'mobile-nav-item'} onClick={(): void => set_hasMobileMenu(false)}>
 						<p className={'font-bold'}>
-							{'New Vaults'}
-						</p>
-					</div>
-				</Link> */}
-				{/* <Link href={'/vote'}>
-					<div className={'mobile-nav-item'} onClick={(): void => set_hasMobileMenu(false)}>
-						<p className={'font-bold'}>
-							{'Vote'}
-						</p>
-					</div>
-				</Link> */}
-				<Link href={'/holdings'}>
-					<div className={'mobile-nav-item'} onClick={(): void => set_hasMobileMenu(false)}>
-						<p className={'font-bold'}>
-							{'Holdings'}
+							{'Offer Bribe'}
 						</p>
 					</div>
 				</Link>
-				<Link href={'/about'}>
-					<div className={'mobile-nav-item'} onClick={(): void => set_hasMobileMenu(false)}>
-						<p className={'font-bold'}>
-							{'About'}
-						</p>
-					</div>
-				</Link>
+
 			</ModalMobileMenu>
 		</>
 	);
