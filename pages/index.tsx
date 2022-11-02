@@ -1,62 +1,20 @@
-import React, {ReactElement, ReactNode, useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {ReactElement, ReactNode, useMemo, useState} from 'react';
 import Link from 'next/link';
 import {BigNumber} from 'ethers';
 import {Button} from '@yearn-finance/web-lib/components';
-import {useWeb3} from '@yearn-finance/web-lib/contexts';
-import {performBatchedUpdates, toAddress} from '@yearn-finance/web-lib/utils';
-import {GaugeRow, GaugeRowHead} from 'components/apps/ybribes/GaugeRow';
+import {toAddress} from '@yearn-finance/web-lib/utils';
+import {GaugeTableEmpty} from 'components/apps/ybribes/claim/GaugeTableEmpty';
+import {GaugeTableHead} from 'components/apps/ybribes/claim/GaugeTableHead';
+import {GaugeTableRow} from 'components/apps/ybribes/claim/GaugeTableRow';
+import {HeroTimer} from 'components/apps/ybribes/HeroTimer';
 import {useBribes} from 'contexts/useBribes';
 import {useCurve} from 'contexts/useCurve';
-import dayjs, {extend} from 'dayjs';
-import dayjsDuration from 'dayjs/plugin/duration.js';
 import {TCurveGauges} from 'types/curves.d';
 
-extend(dayjsDuration);
-
-function	EmptyGaugeList({category}: {category: string}): ReactElement {
-	const	{isLoading} = useBribes();
-	const	{isActive} = useWeb3();
-
-	if (!isActive) {
-		return (
-			<div className={'flex h-96 w-full flex-col items-center justify-center py-2 px-10'}>
-				<b className={'text-lg'}>{'Connect your wallet'}</b>
-				<p className={'text-neutral-600'}>{'Please connect your wallet to load the gauges.'}</p>
-			</div>
-		);	
-	}
-	if (isLoading) {
-		return (
-			<div className={'flex h-96 w-full flex-col items-center justify-center py-2 px-10'}>
-				<b className={'text-lg'}>{'Fetching gauge data'}</b>
-				<p className={'text-neutral-600'}>{'We are retrieving the gauge. Please wait.'}</p>
-			</div>
-		);	
-	}
-	if (category === 'claimable') {
-		return (
-			<div className={'flex h-96 w-full flex-col items-center justify-center py-2 px-10'}>
-				<b className={'text-lg'}>{'No reward'}</b>
-				<p className={'text-neutral-600'}>{'You have nothing to claim.'}</p>
-			</div>
-		);	
-	}
-	return (
-		<div className={'flex h-96 w-full flex-col items-center justify-center py-2 px-10'}>
-			<b className={'text-lg'}>{'No Gauges'}</b>
-			<p className={'text-neutral-600'}>
-				{'No Gauges available.'}
-			</p>
-		</div>
-	);	
-}
-
 function	GaugeList(): ReactElement {
-	const	{rewards, claimable} = useBribes();
+	const	{currentRewards, claimable} = useBribes();
 	const	{gauges} = useCurve();
 	const	[category, set_category] = useState('all');
-	const	[sortBy, set_sortBy] = useState('relativeWeigth');
-	const	[sortDirection, set_sortDirection] = useState('desc');
 
 	const	filteredGauges = useMemo((): TCurveGauges[] => {
 		if (category === 'claimable') {
@@ -65,8 +23,8 @@ function	GaugeList(): ReactElement {
 				return currentClaimableMap.some((value: BigNumber): boolean => value.gt(0));
 			});
 		}
-		return gauges.filter((gauge): boolean => rewards[toAddress(gauge.gauge)] !== undefined);
-	}, [category, gauges, rewards, claimable]);
+		return gauges.filter((gauge): boolean => currentRewards[toAddress(gauge.gauge)] !== undefined);
+	}, [category, gauges, currentRewards, claimable]);
 
 	const	sortedGauges = useMemo((): TCurveGauges[] => {
 		const	gaugesToSort = [...filteredGauges];
@@ -96,63 +54,18 @@ function	GaugeList(): ReactElement {
 					</div>
 				</div>
 				<div className={'grid w-full grid-cols-1 pb-2 md:pb-4'}>
-					<GaugeRowHead
-						sortBy={sortBy}
-						sortDirection={sortDirection}
-						onSort={(_sortBy: string, _sortDirection: string): void => {
-							performBatchedUpdates((): void => {
-								set_sortBy(_sortBy);
-								set_sortDirection(_sortDirection);
-							});
-						}} />
+					<GaugeTableHead />
 					{sortedGauges.length === 0 ? (
-						<EmptyGaugeList category={category} />
+						<GaugeTableEmpty category={category} />
 					) : sortedGauges.map((gauge): ReactNode => {
 						if (!gauge) {
 							return (null);
 						}
-						return <GaugeRow key={gauge.name} currentGauge={gauge} />;
+						return <GaugeTableRow key={gauge.name} currentGauge={gauge} />;
 					})}
 				</div>
 			</div>
 		</section>
-	);
-}
-
-function	Period(): ReactElement {
-	const	{nextPeriod} = useBribes();
-	const	interval = useRef<NodeJS.Timeout | null>(null);
-	const	[time, set_time] = useState<number>(0);
-
-	useEffect((): VoidFunction => {
-		interval.current = setInterval((): void => {
-			const currentTime = dayjs();
-			const diffTime = nextPeriod - currentTime.unix();
-			const duration = dayjs.duration(diffTime * 1000, 'milliseconds');
-			set_time(duration.asMilliseconds());
-		}, 1000);
-
-		return (): void => {
-			if (interval.current) {
-				clearInterval(interval.current);
-			}
-		};
-	}, [nextPeriod]);
-
-	const formatTimestamp = useCallback((n: number): string => {
-		const	twoDP = (n: number): string | number => (n > 9 ? n : '0' + n);
-		const	duration = dayjs.duration(n - 1000, 'milliseconds');
-		const	days = duration.days();
-		const	hours = duration.hours();
-		const	minutes = duration.minutes();
-		const	seconds = duration.seconds();
-		return `${days ? `${days}d ` : ''}${twoDP(hours)}h ${twoDP(minutes)}m ${twoDP(seconds)}s`;
-	}, []);
-
-	return (
-		<b className={'tabular-nums'}>
-			{time ? formatTimestamp(time) : '00H 00M 00S'}
-		</b>
 	);
 }
 
@@ -162,7 +75,7 @@ function	Index(): ReactElement {
 			<div className={'mx-auto mb-10 flex w-full max-w-6xl flex-col items-center justify-center md:mb-20'}>
 				<div className={'mt-10 w-[300px] md:w-full'}>
 					<div className={'flex w-full items-center justify-center text-center text-4xl font-bold uppercase text-neutral-900 md:text-8xl'}>
-						<Period />
+						<HeroTimer />
 					</div>
 				</div>
 				<div className={'mt-8 mb-10 w-full max-w-6xl text-center'}>

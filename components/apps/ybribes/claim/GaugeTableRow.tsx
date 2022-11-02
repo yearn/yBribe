@@ -4,68 +4,11 @@ import {BigNumber, ethers} from 'ethers';
 import {Button} from '@yearn-finance/web-lib/components';
 import {useWeb3} from '@yearn-finance/web-lib/contexts';
 import {defaultTxStatus, format, toAddress, Transaction} from '@yearn-finance/web-lib/utils';
-import IconChevronPlain from 'components/icons/IconChevronPlain';
 import {useBribes} from 'contexts/useBribes';
 import {useYearn} from 'contexts/useYearn';
 import {claimReward} from 'utils/actions/claimReward';
 
 import type {TCurveGauges, TKeyStringBN} from 'types/curves.d';
-
-function	GaugeRowHead({sortBy, sortDirection, onSort}: {sortBy: string, sortDirection: string, onSort: (sortBy: string, sortDirection: string) => void}): ReactElement {
-
-	const	isFalse = false;
-
-	function	renderChevron(shouldSortBy: boolean, _sortDirection: string): ReactElement {
-		if (shouldSortBy && _sortDirection === 'desc') {
-			return <IconChevronPlain className={'h-4 w-4 min-w-[16px] cursor-pointer text-neutral-500'} />;
-		}
-		if (shouldSortBy && _sortDirection === 'asc') {
-			return <IconChevronPlain className={'h-4 w-4 min-w-[16px] rotate-180 cursor-pointer text-neutral-500'} />;
-		}
-		return <IconChevronPlain className={'h-4 w-4 min-w-[16px] cursor-pointer text-neutral-200/40 transition-colors group-hover:text-neutral-500'} />;
-	}
-
-	if (isFalse) {
-		console.log(sortBy, sortDirection, onSort);
-		renderChevron(true, 'asc');
-	}
-
-	return (
-		<div className={'mb-2 hidden w-full grid-cols-6 px-10 md:grid'}>
-			<p className={'col-span-2 text-start text-base text-neutral-400'}>{'Token'}</p>
-			<div className={'col-span-4 grid grid-cols-8'}>
-				<div
-					// onClick={(): void => onSort('apr', sortBy === 'apr' ? (sortDirection === 'desc' ? 'asc' : 'desc') : 'desc')}
-					className={'group col-span-2 flex flex-row items-center justify-end space-x-1'}>
-					<p className={'text-end text-base text-neutral-400'}>
-						{'APR'}
-					</p>
-					{/* {renderChevron(sortBy === 'apr', sortDirection)} */}
-				</div>
-
-				<div
-					// onClick={(): void => onSort('claimable', sortBy === 'claimable' ? (sortDirection === 'desc' ? 'asc' : 'desc') : 'desc')}
-					className={'group col-span-2 flex flex-row items-center justify-end space-x-1'}>
-					<p className={'text-end text-base text-neutral-400'}>
-						{'Claimable'}
-					</p>
-					{/* {renderChevron(sortBy === 'claimable', sortDirection)} */}
-				</div>
-
-				<div
-					// onClick={(): void => onSort('rewards', sortBy === 'rewards' ? (sortDirection === 'desc' ? 'asc' : 'desc') : 'desc')}
-					className={'group col-span-3 flex flex-row items-center justify-end space-x-1 pr-16'}>
-					<p className={'text-end text-base text-neutral-400'}>
-						{'Rewards'}
-					</p>
-					{/* {renderChevron(sortBy === 'rewards', sortDirection)} */}
-				</div>
-
-				<p className={'col-span-1 text-end text-base text-neutral-400'}>&nbsp;</p>
-			</div>
-		</div>
-	);
-}
 
 function	GaugeRowItemWithExtraData({address, value}: {address: string, value: BigNumber}): ReactElement {
 	const	{tokens, prices} = useYearn();
@@ -91,14 +34,14 @@ function	GaugeRowItemWithExtraData({address, value}: {address: string, value: Bi
 	);
 }
 
-function	GaugeRow({currentGauge}: {currentGauge: TCurveGauges}): ReactElement {
+function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactElement {
 	const	{isActive, address, provider} = useWeb3();
-	const	{rewards, claimable, refresh} = useBribes();
+	const	{currentRewards, claimable, refresh} = useBribes();
 	const	[txStatusClaim, set_txStatusClaim] = useState(defaultTxStatus);
 
 	const	rewardsForCurrentGauge = useMemo((): TKeyStringBN => {
-		return rewards[toAddress(currentGauge.gauge)];
-	}, [currentGauge.gauge, rewards]);
+		return currentRewards[toAddress(currentGauge.gauge)];
+	}, [currentGauge.gauge, currentRewards]);
 
 	const	claimableForCurrentGauge = useMemo((): TKeyStringBN => {
 		return claimable[toAddress(currentGauge.gauge)];
@@ -212,4 +155,4 @@ function	GaugeRow({currentGauge}: {currentGauge: TCurveGauges}): ReactElement {
 	);
 }
 
-export {GaugeRow, GaugeRowHead};
+export {GaugeTableRow};

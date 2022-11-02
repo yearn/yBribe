@@ -33,9 +33,6 @@ export const CurveContextApp = ({children}: {children: React.ReactElement}): Rea
 			if (currentGauge.side_chain) {
 				continue;
 			}
-			if (currentGauge.factory) {
-				continue;
-			}
 			_gaugesForMainnet.push(currentGauge);
 		}
 		return _gaugesForMainnet;
