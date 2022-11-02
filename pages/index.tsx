@@ -1,5 +1,4 @@
-import React, {ReactElement, ReactNode, useCallback, useMemo, useState} from 'react';
-import CountUp from 'react-countup';
+import React, {ReactElement, ReactNode, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import Link from 'next/link';
 import {BigNumber} from 'ethers';
 import {Button} from '@yearn-finance/web-lib/components';
@@ -121,43 +120,39 @@ function	GaugeList(): ReactElement {
 }
 
 function	Period(): ReactElement {
-	const[time, set_time] = useState<number>(0);
-	const	nextThursdayTimestamp = useMemo((): number => {
-		const	now = new Date();
-		const	weekDay = now.getDay();
-		const	weekDayDiff = 4 - weekDay;
-		const	nextThursday = new Date(now.getTime() + (weekDayDiff * 24 * 60 * 60 * 1000));
-		nextThursday.setHours(0, 0, 0, 0);
-		return nextThursday.getTime() / 1000;
-	}, []);
+	const	{nextPeriod} = useBribes();
+	const	interval = useRef<NodeJS.Timeout | null>(null);
+	const	[time, set_time] = useState<number>(0);
 
-	useMemo((): void => {
-		setInterval((): void => {
+	useEffect((): VoidFunction => {
+		interval.current = setInterval((): void => {
 			const currentTime = dayjs();
-			const diffTime = nextThursdayTimestamp - currentTime.unix();
+			const diffTime = nextPeriod - currentTime.unix();
 			const duration = dayjs.duration(diffTime * 1000, 'milliseconds');
 			set_time(duration.asMilliseconds());
 		}, 1000);
-	}, [nextThursdayTimestamp]);
+
+		return (): void => {
+			if (interval.current) {
+				clearInterval(interval.current);
+			}
+		};
+	}, [nextPeriod]);
 
 	const formatTimestamp = useCallback((n: number): string => {
 		const	twoDP = (n: number): string | number => (n > 9 ? n : '0' + n);
 		const	duration = dayjs.duration(n - 1000, 'milliseconds');
-		const	timestamp = `${
-			duration.days() && duration.days() + 'd '
-		}${duration.hours()}h ${twoDP(duration.minutes())}m ${twoDP(
-			duration.seconds()
-		)}s`;
-		return timestamp;
+		const	days = duration.days();
+		const	hours = duration.hours();
+		const	minutes = duration.minutes();
+		const	seconds = duration.seconds();
+		return `${days ? `${days}d ` : ''}${twoDP(hours)}h ${twoDP(minutes)}m ${twoDP(seconds)}s`;
 	}, []);
 
 	return (
-		<CountUp
-			preserveValue
-			decimals={0}
-			duration={0.5}
-			formattingFn={formatTimestamp}
-			end={time} />
+		<b className={'tabular-nums'}>
+			{time ? formatTimestamp(time) : '00H 00M 00S'}
+		</b>
 	);
 }
 

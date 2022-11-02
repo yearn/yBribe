@@ -13,12 +13,16 @@ import type {TCurveGaugeRewards} from 'types/curves.d';
 export type	TBribesContext = {
 	rewards: TCurveGaugeRewards,
 	claimable: TCurveGaugeRewards,
+	currentPeriod: number,
+	nextPeriod: number,
 	isLoading: boolean,
 	refresh: () => Promise<void>
 }
 const	defaultProps: TBribesContext = {
 	rewards: {},
 	claimable: {},
+	currentPeriod: 0,
+	nextPeriod: 0,
 	isLoading: true,
 	refresh: async (): Promise<void> => undefined
 };
@@ -38,6 +42,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	const	[claimable, set_claimable] = useState<TCurveGaugeRewards>({});
 	const	[isLoading, set_isLoading] = useState<boolean>(true);
 	const	[currentPeriod, set_currentPeriod] = useState<number>(getLastThursday());
+	const	[nextPeriod, set_nextPeriod] = useState<number>(getLastThursday() + (86400 * 7));
 
 	/* 🔵 - Yearn Finance ******************************************************
 	**	getSharedStuffFromBribes will help you retrieved some elements from the
@@ -49,7 +54,10 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 		const	curveBribeV3Contract = new Contract(process.env.CURVE_BRIBE_V3_ADDRESS as string, CURVE_BRIBE_V3);
 		const	[_currentPeriod] = await ethcallProvider.tryAll([curveBribeV3Contract.current_period()]) as [number];	
 
-		set_currentPeriod(_currentPeriod);
+		performBatchedUpdates((): void => {
+			set_currentPeriod(Number(_currentPeriod));
+			set_nextPeriod(Number(_currentPeriod) + (86400 * 7));
+		});
 	}, [provider]);
 	useEffect((): void => {
 		getSharedStuffFromBribes();
@@ -195,6 +203,8 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 				rewards: rewards || {},
 				claimable: claimable || {},
 				isLoading: isLoading,
+				currentPeriod,
+				nextPeriod,
 				refresh: async (): Promise<void> => {
 					await getBribes();
 				}
