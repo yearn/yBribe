@@ -1,21 +1,23 @@
-import {ethers} from 'ethers';
+import {BigNumber, ethers} from 'ethers';
 
-export async function	claimReward(
+export async function	addReward(
 	provider: ethers.providers.Web3Provider,
-	contractAddress: string,
-	user: string,
-	gauge: string,
-	token: string
+	gaugeAddress: string,
+	tokenAddress: string,
+	amount: BigNumber
 ): Promise<boolean> {
 	const	signer = provider.getSigner();
-
 	try {
 		const	contract = new ethers.Contract(
-			contractAddress,
-			['function claim_reward(address, address, address)'],
+			process.env.CURVE_BRIBE_V3_ADDRESS as string,
+			['function add_reward_amount(address, address, uint256) external'],
 			signer
 		);
-		const	transaction = await contract.claim_reward(user, gauge, token);
+		const	transaction = await contract.add_reward_amount(
+			gaugeAddress,
+			tokenAddress,
+			amount
+		);
 		const	transactionResult = await transaction.wait();
 		if (transactionResult.status === 0) {
 			console.error('Fail to perform transaction');

@@ -37,3 +37,7 @@ export type TKeyStringBN = {
 export type TCurveGaugeRewards = {
 	[key: string]: TKeyStringBN
 }
+export type TCurveGaugeVersionRewards = {
+	v2: TCurveGaugeRewards,
+	v3: TCurveGaugeRewards,
+}

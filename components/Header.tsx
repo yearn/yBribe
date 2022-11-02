@@ -38,6 +38,11 @@ function	Header(): ReactElement {
 							{'Offer Bribe'}
 						</p>
 					</Link>
+					<Link href={'/about'}>
+						<p className={`yveCRV--nav-link ${router.pathname === '/about' ? 'active' : '' }`}>
+							{'About'}
+						</p>
+					</Link>
 				</nav>
 				<div className={'flex w-1/3 md:hidden'}>
 					<button onClick={(): void => set_hasMobileMenu(true)}>
@@ -98,7 +103,13 @@ function	Header(): ReactElement {
 						</p>
 					</div>
 				</Link>
-
+				<Link href={'/about'}>
+					<div className={'mobile-nav-item'} onClick={(): void => set_hasMobileMenu(false)}>
+						<p className={'font-bold'}>
+							{'About'}
+						</p>
+					</div>
+				</Link>
 			</ModalMobileMenu>
 		</>
 	);

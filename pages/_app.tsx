@@ -2,6 +2,7 @@ import React, {ReactElement} from 'react';
 import {AppProps} from 'next/app';
 import {AnimatePresence, motion} from 'framer-motion';
 import {WithYearn} from '@yearn-finance/web-lib/contexts';
+import {HeroTimer} from 'components/apps/ybribes/HeroTimer';
 import Header from 'components/Header';
 import Meta from 'components/Meta';
 import {BribesContextApp} from 'contexts/useBribes';
@@ -19,22 +20,30 @@ const variants = {
 
 function	WithLayout(props: AppProps): ReactElement {
 	const	{Component, pageProps, router} = props;
+	const	getLayout = (Component as any).getLayout || ((page: ReactElement): ReactElement => page);
 
 	return (
 		<div id={'app'} className={'mx-auto mb-0 flex max-w-6xl'}>
 			<div className={'flex min-h-[100vh] w-full flex-col'}>
 				<Header />
+				<div className={'md:mb-0 md:mt-16'}>
+					<div className={'mx-auto flex w-full max-w-6xl flex-col items-center justify-center'}>
+						<div className={'mt-10 w-[300px] md:w-full'}>
+							<div className={'flex w-full items-center justify-center text-center text-4xl font-bold uppercase text-neutral-900 md:text-8xl'}>
+								<HeroTimer />
+							</div>
+						</div>
+					</div>
+				</div>
 				<AnimatePresence mode={'wait'}>
 					<motion.div
 						key={router.asPath}
 						initial={'initial'}
 						animate={'enter'}
 						exit={'exit'}
-						className={'my-0 h-full md:mb-0 md:mt-16'}
+						className={'my-0 h-full'}
 						variants={variants}>
-						<Component
-							router={props.router}
-							{...pageProps} />
+						{getLayout(<Component router={props.router} {...pageProps} />)}
 					</motion.div>
 				</AnimatePresence>
 			</div>
