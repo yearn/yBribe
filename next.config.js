@@ -37,7 +37,8 @@ module.exports = (phase) => withPWA({
 		// YDAEMON_BASE_URI: 'https://ydaemon.yearn.finance',
 		// YDAEMON_BASE_URI: 'http://localhost:8080',
 		BASE_YEARN_ASSETS_URI: 'https://raw.githubusercontent.com/yearn/yearn-assets/master/icons/multichain-tokens/',
-		CURVE_BRIBE_V2_ADDRESS: '0x7893bbb46613d7a4FbcC31Dab4C9b823FfeE1026'
+		CURVE_BRIBE_V2_ADDRESS: '0x7893bbb46613d7a4FbcC31Dab4C9b823FfeE1026',
+		CURVE_BRIBE_V3_ADDRESS: '0x03dFdBcD4056E2F92251c7B07423E1a33a7D3F6d'
 	}
 });
 

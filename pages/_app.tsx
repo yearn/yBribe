@@ -4,6 +4,7 @@ import {AnimatePresence, motion} from 'framer-motion';
 import {WithYearn} from '@yearn-finance/web-lib/contexts';
 import Header from 'components/Header';
 import Meta from 'components/Meta';
+import {BribesContextApp} from 'contexts/useBribes';
 import {CurveContextApp} from 'contexts/useCurve';
 import {YearnContextApp} from 'contexts/useYearn';
 
@@ -53,13 +54,15 @@ function	MyApp(props: AppProps): ReactElement {
 			}}>
 			<YearnContextApp>
 				<CurveContextApp>
-					<>
-						<Meta />
-						<WithLayout
-							Component={Component}
-							pageProps={pageProps}
-							router={props.router} />
-					</>
+					<BribesContextApp>
+						<>
+							<Meta />
+							<WithLayout
+								Component={Component}
+								pageProps={pageProps}
+								router={props.router} />
+						</>
+					</BribesContextApp>
 				</CurveContextApp>
 			</YearnContextApp>
 		</WithYearn>

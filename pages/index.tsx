@@ -1,10 +1,12 @@
 import React, {ReactElement, ReactNode, useCallback, useMemo, useState} from 'react';
 import CountUp from 'react-countup';
 import Link from 'next/link';
-import {BigNumber, ethers} from 'ethers';
+import {BigNumber} from 'ethers';
 import {Button} from '@yearn-finance/web-lib/components';
-import {format, performBatchedUpdates, toAddress} from '@yearn-finance/web-lib/utils';
+import {useWeb3} from '@yearn-finance/web-lib/contexts';
+import {performBatchedUpdates, toAddress} from '@yearn-finance/web-lib/utils';
 import {GaugeRow, GaugeRowHead} from 'components/apps/ybribes/GaugeRow';
+import {useBribes} from 'contexts/useBribes';
 import {useCurve} from 'contexts/useCurve';
 import dayjs, {extend} from 'dayjs';
 import dayjsDuration from 'dayjs/plugin/duration.js';
@@ -12,9 +14,48 @@ import {TCurveGauges} from 'types/curves.d';
 
 extend(dayjsDuration);
 
+function	EmptyGaugeList({category}: {category: string}): ReactElement {
+	const	{isLoading} = useBribes();
+	const	{isActive} = useWeb3();
+
+	if (!isActive) {
+		return (
+			<div className={'flex h-96 w-full flex-col items-center justify-center py-2 px-10'}>
+				<b className={'text-lg'}>{'Connect your wallet'}</b>
+				<p className={'text-neutral-600'}>{'Please connect your wallet to load the gauges.'}</p>
+			</div>
+		);	
+	}
+	if (isLoading) {
+		return (
+			<div className={'flex h-96 w-full flex-col items-center justify-center py-2 px-10'}>
+				<b className={'text-lg'}>{'Fetching gauge data'}</b>
+				<p className={'text-neutral-600'}>{'We are retrieving the gauge. Please wait.'}</p>
+			</div>
+		);	
+	}
+	if (category === 'claimable') {
+		return (
+			<div className={'flex h-96 w-full flex-col items-center justify-center py-2 px-10'}>
+				<b className={'text-lg'}>{'No reward'}</b>
+				<p className={'text-neutral-600'}>{'You have nothing to claim.'}</p>
+			</div>
+		);	
+	}
+	return (
+		<div className={'flex h-96 w-full flex-col items-center justify-center py-2 px-10'}>
+			<b className={'text-lg'}>{'No Gauges'}</b>
+			<p className={'text-neutral-600'}>
+				{'No Gauges available.'}
+			</p>
+		</div>
+	);	
+}
+
 function	GaugeList(): ReactElement {
-	const	{gauges, rewards, claimable} = useCurve();
-	const	[category, set_category] = useState('withBribe');
+	const	{rewards, claimable} = useBribes();
+	const	{gauges} = useCurve();
+	const	[category, set_category] = useState('all');
 	const	[sortBy, set_sortBy] = useState('relativeWeigth');
 	const	[sortDirection, set_sortDirection] = useState('desc');
 
@@ -25,39 +66,20 @@ function	GaugeList(): ReactElement {
 				return currentClaimableMap.some((value: BigNumber): boolean => value.gt(0));
 			});
 		}
-		if (category === 'withBribe') {
-			return gauges.filter((gauge): boolean => rewards[toAddress(gauge.gauge)] !== undefined);
-		}
-		return gauges;
+		return gauges.filter((gauge): boolean => rewards[toAddress(gauge.gauge)] !== undefined);
 	}, [category, gauges, rewards, claimable]);
 
 	const	sortedGauges = useMemo((): TCurveGauges[] => {
 		const	gaugesToSort = [...filteredGauges];
-		if (sortBy === 'relativeWeigth') {
-			return gaugesToSort.sort((a, b): number => {
-				const	aWeight = format.toNormalizedValue(format.BN(String(a?.gauge_controller?.gauge_relative_weight) || ethers.constants.Zero), 18);
-				const	bWeight = format.toNormalizedValue(format.BN(String(b?.gauge_controller?.gauge_relative_weight) || ethers.constants.Zero), 18);
-
-				if (sortDirection === 'asc') {
-					return (aWeight) - (bWeight);
-				}
-				return (bWeight) - (aWeight);
-			});
-		}
-
-		if (sortBy === 'rewards') {
-			//
-		}
-
 		return gaugesToSort;
-	}, [sortBy, filteredGauges, sortDirection]);
+	}, [filteredGauges]);
 	
 	return (
-		<section className={'mt-4 mb-40 grid w-full grid-cols-12 gap-y-10 pb-10 md:mt-20 md:gap-x-10 md:gap-y-20'}>
+		<section className={'mt-4 mb-20 grid w-full grid-cols-12 pb-10 md:mb-40 md:mt-20'}>
 			<div className={'col-span-12 flex w-full flex-col bg-neutral-100'}>
-				<div className={'flex flex-row items-center justify-between px-10 pt-10 pb-8'}>
+				<div className={'flex flex-row items-center justify-between px-4 pt-4 pb-2 md:px-10 md:pt-10 md:pb-8'}>
 					<div>
-						<h2 className={'text-3xl font-bold'}>{'Gauges'}</h2>
+						<h2 className={'text-lg font-bold md:text-3xl'}>{'Gauges'}</h2>
 					</div>
 					<div className={'flex flex-row space-x-4'}>
 						<Button
@@ -67,12 +89,6 @@ function	GaugeList(): ReactElement {
 							{'Claimable'}
 						</Button>
 						<Button
-							onClick={(): void => set_category('withBribe')}
-							variant={category === 'withBribe' ? 'filled' : 'outlined'}
-							className={'yearn--button-smaller'}>
-							{'With Bribe'}
-						</Button>
-						<Button
 							onClick={(): void => set_category('all')}
 							variant={category === 'all' ? 'filled' : 'outlined'}
 							className={'yearn--button-smaller'}>
@@ -80,7 +96,7 @@ function	GaugeList(): ReactElement {
 						</Button>
 					</div>
 				</div>
-				<div className={'grid w-full grid-cols-1 pb-4'}>
+				<div className={'grid w-full grid-cols-1 pb-2 md:pb-4'}>
 					<GaugeRowHead
 						sortBy={sortBy}
 						sortDirection={sortDirection}
@@ -91,21 +107,15 @@ function	GaugeList(): ReactElement {
 							});
 						}} />
 					{sortedGauges.length === 0 ? (
-						<div className={'flex h-96 w-full flex-col items-center justify-center py-2 px-10'}>
-							<b className={'text-lg'}>{'No Gauges'}</b>
-							<p className={'text-neutral-600'}>{'No Gauges available. What a shame. What are the dev doing. Bouuuuuh.'}</p>
-
-						</div>
+						<EmptyGaugeList category={category} />
 					) : sortedGauges.map((gauge): ReactNode => {
 						if (!gauge) {
 							return (null);
 						}
 						return <GaugeRow key={gauge.name} currentGauge={gauge} />;
 					})}
-
 				</div>
 			</div>
-
 		</section>
 	);
 }
@@ -156,14 +166,14 @@ function	Index(): ReactElement {
 		<>
 			<div className={'mx-auto mb-10 flex w-full max-w-6xl flex-col items-center justify-center md:mb-20'}>
 				<div className={'mt-10 w-[300px] md:w-full'}>
-					<div className={'flex w-full items-center justify-center text-center text-5xl font-bold uppercase text-neutral-900 md:text-8xl'}>
+					<div className={'flex w-full items-center justify-center text-center text-4xl font-bold uppercase text-neutral-900 md:text-8xl'}>
 						<Period />
 					</div>
 				</div>
 				<div className={'mt-8 mb-10 w-full max-w-6xl text-center'}>
 					<b className={'text-center text-lg md:text-2xl'}>{'Get more for your votes!'}</b>
 					<p className={'mt-8 whitespace-pre-line text-center text-base text-neutral-600'}>
-						{'Add a reward to a pool which will be distributed proportionally to everyone who votes for it.'}
+						{'Sell your vote to the highest bidder, or offer a bribe to increase CRV emissions to your favorite Curve pool.\nJust like democracy, but you don\'t need to wear a suit.'}
 					</p>
 				</div>
 				<div className={'flex flex-row items-center justify-center space-x-10'}>
