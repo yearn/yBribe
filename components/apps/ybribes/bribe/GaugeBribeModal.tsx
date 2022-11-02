@@ -95,7 +95,7 @@ function	GaugeBribeModal({currentGauge, onClose}: {currentGauge: TCurveGauges, o
 					onClick={onApproveFrom}
 					className={'w-full'}
 					isBusy={txStatusApprove.pending}
-					isDisabled={!isActive || amount.raw.isZero()}>
+					isDisabled={!isActive || isZeroAddress(tokenAddress) || amount.raw.isZero()}>
 					{`Approve ${selectedToken?.symbol || 'token'}`}
 				</Button>
 			);
@@ -106,7 +106,7 @@ function	GaugeBribeModal({currentGauge, onClose}: {currentGauge: TCurveGauges, o
 				onClick={onAddReward}
 				className={'w-full'}
 				isBusy={txStatusAddReward.pending}
-				isDisabled={!isActive || amount.raw.isZero()}>
+				isDisabled={!isActive || isZeroAddress(tokenAddress) || amount.raw.isZero()}>
 				{'Deposit'}
 			</Button>
 		);
