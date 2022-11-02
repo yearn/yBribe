@@ -1,19 +1,9 @@
 import React, {ReactElement} from 'react';
-import {useWeb3} from '@yearn-finance/web-lib/contexts';
 import {useBribes} from 'contexts/useBribes';
 
 function	GaugeTableEmpty({category}: {category: string}): ReactElement {
 	const	{isLoading} = useBribes();
-	const	{isActive} = useWeb3();
 
-	if (!isActive) {
-		return (
-			<div className={'flex h-96 w-full flex-col items-center justify-center py-2 px-10'}>
-				<b className={'text-lg'}>{'Connect your wallet'}</b>
-				<p className={'text-neutral-600'}>{'Please connect your wallet to load the gauges.'}</p>
-			</div>
-		);	
-	}
 	if (isLoading) {
 		return (
 			<div className={'flex h-96 w-full flex-col items-center justify-center py-2 px-10'}>

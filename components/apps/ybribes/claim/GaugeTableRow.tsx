@@ -22,7 +22,7 @@ function	GaugeRowItemWithExtraData({address, value, isV2}: {address: string, val
 
 	return (
 		<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
-			<p className={`${isV2 ? 'tooltip' : ''} inline-flex items-baseline text-base tabular-nums text-neutral-900`}>
+			<div className={`${isV2 ? 'tooltip' : ''} inline-flex items-baseline text-base tabular-nums text-neutral-900`}>
 				{`$ ${format.amount(bribeValue, 2, 2)}`}
 				<span className={'absolute -right-2 text-sm text-neutral-400'}>
 					{`${isV2 ? '*' : ''}`}
@@ -33,8 +33,7 @@ function	GaugeRowItemWithExtraData({address, value, isV2}: {address: string, val
 						<p>{'Because of a vulnerability in the BribeV2 contract, the amount of reward may be incorrect'}</p>
 					</span>
 				) : null}
-
-			</p>
+			</div>
 			<p className={'inline-flex items-baseline text-right text-xs tabular-nums text-neutral-400'}>
 				{format.amount(bribeAmount, 2, 2)}
 				&nbsp;
@@ -60,12 +59,6 @@ function	GaugeRowItemAPR({address, value, isV2}: {address: string, value: BigNum
 	const	APR = useMemo((): number => {
 		const	tokenInfo = tokens?.[address];
 		const	decimals = tokenInfo?.decimals || 18;
-		console.log({
-			pending: format.toNormalizedValue(value, decimals),
-			crvPrice: crvPrice / 1000000,
-			tokenPrice: tokenPrice / 1000000
-		});
-
 		if (tokenPrice === 0 || crvPrice === 0) {
 			return 0;
 		}
@@ -150,10 +143,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 									className={'yearn--button-smaller w-full'}
 									onClick={(): void => onClaimReward(key)}
 									isBusy={txStatusClaim.pending}
-									isDisabled={
-										!isActive
-										|| !hasSomethingToClaim
-									}>
+									isDisabled={!isActive || !hasSomethingToClaim}>
 									{'Claim'}
 								</Button>
 							</div>
@@ -317,10 +307,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 										className={'yearn--button-smaller w-full'}
 										onClick={(): void => onClaimReward(key)}
 										isBusy={txStatusClaim.pending}
-										isDisabled={
-											!isActive
-									|| !hasSomethingToClaim
-										}>
+										isDisabled={!isActive || !hasSomethingToClaim}>
 										{'Claim'}
 									</Button>
 								</div>
