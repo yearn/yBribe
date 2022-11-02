@@ -59,7 +59,7 @@ function	GaugeList(): ReactElement {
 							onClick={(): void => set_category('all')}
 							variant={category === 'all' ? 'filled' : 'outlined'}
 							className={'yearn--button-smaller'}>
-							{'V3'}
+							{'All'}
 						</Button>
 						<Button
 							onClick={(): void => set_category('v2')}
@@ -94,7 +94,7 @@ function	Index(): ReactElement {
 			<div className={'mt-8 mb-10 w-full max-w-6xl text-center'}>
 				<b className={'text-center text-lg md:text-2xl'}>{'Get more for your votes.'}</b>
 				<p className={'mt-8 whitespace-pre-line text-center text-base text-neutral-600'}>
-					{'Sell your vote to the highest bidder by voting on briber\'s gauge and claiming a reward.\nIt\'s like DC lobbying, but without the long lunch.'}
+					{'Sell your vote to the highest bidder by voting on the briber\'s gauge and claiming a reward.\nIt\'s like DC lobbying, but without the long lunches.'}
 				</p>
 			</div>
 			<GaugeList />

@@ -10,7 +10,12 @@ import {claimReward} from 'utils/actions/claimReward';
 
 import type {TCurveGauges, TKeyStringBN} from 'types/curves.d';
 
-function	GaugeRowItemWithExtraData({address, value, isV2}: {address: string, value: BigNumber, isV2?: boolean}): ReactElement {
+function	GaugeRowItemWithExtraData({
+	address,
+	value,
+	minDecimals = 2,
+	isV2
+}: {address: string, value: BigNumber, minDecimals?: number, isV2?: boolean}): ReactElement {
 	const	{tokens, prices} = useYearn();
 
 	const	tokenInfo = tokens?.[address];
@@ -23,7 +28,7 @@ function	GaugeRowItemWithExtraData({address, value, isV2}: {address: string, val
 	return (
 		<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
 			<div className={`${isV2 ? 'tooltip' : ''} inline-flex items-baseline text-base tabular-nums text-neutral-900`}>
-				{`$ ${format.amount(bribeValue, 2, 2)}`}
+				{`$ ${format.amount(bribeValue, minDecimals, minDecimals)}`}
 				<span className={'absolute -right-2 text-sm text-neutral-400'}>
 					{`${isV2 ? '*' : ''}`}
 				</span>
@@ -35,7 +40,7 @@ function	GaugeRowItemWithExtraData({address, value, isV2}: {address: string, val
 				) : null}
 			</div>
 			<p className={'inline-flex items-baseline text-right text-xs tabular-nums text-neutral-400'}>
-				{format.amount(bribeAmount, 2, 2)}
+				{format.amount(bribeAmount, minDecimals, minDecimals)}
 				&nbsp;
 				<span>{`${symbol}`}</span>
 			</p>
@@ -192,7 +197,8 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 							) : currentRewardsForCurrentGaugeMap.map(([key, value]: [string, BigNumber]): ReactElement => (
 								<GaugeRowItemWithExtraData
 									isV2={category === 'v2'}
-									key={`rewards-${currentGauge.gauge}-${key}`}
+									minDecimals={5}
+									key={`current-rewards-${currentGauge.gauge}-${key}`}
 									address={toAddress(key)}
 									value={category === 'v2' ? value.div(126144000) : value} />
 							))
@@ -215,7 +221,8 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 							) : nextRewardsForCurrentGaugeMap.map(([key, value]: [string, BigNumber]): ReactElement => (
 								<GaugeRowItemWithExtraData
 									isV2={category === 'v2'}
-									key={`rewards-${currentGauge.gauge}-${key}`}
+									minDecimals={5}
+									key={`pending-rewards-${currentGauge.gauge}-${key}`}
 									address={toAddress(key)}
 									value={category === 'v2' ? value.div(126144000) : value} />
 							))

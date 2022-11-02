@@ -69,7 +69,7 @@ function	OfferBribe(): ReactElement {
 			<div className={'mt-8 mb-10 w-full max-w-6xl text-center'}>
 				<b className={'text-center text-lg md:text-2xl'}>{'Get more for your votes.'}</b>
 				<p className={'mt-8 whitespace-pre-line text-center text-base text-neutral-600'}>
-					{'Offer a bribe to increase CRV emission to your favorite Curve pool.\nJust like democracy, minus the suit and expense account.'}
+					{'Offer a bribe to increase CRV emissions to your favorite Curve pool.\nJust like democracy, minus the suit and expense account.'}
 				</p>
 			</div>
 			<GaugeList />
