@@ -48,7 +48,7 @@ function	GaugeList(): ReactElement {
 					<div>
 						<h2 className={'text-lg font-bold md:text-3xl'}>{'Claim Bribe'}</h2>
 					</div>
-					<div className={'flex flex-row space-x-4'}>
+					<div className={'hidden flex-row space-x-4 md:flex'}>
 						<Button
 							onClick={(): void => set_category('claimable')}
 							variant={category === 'claimable' ? 'filled' : 'outlined'}
@@ -67,6 +67,15 @@ function	GaugeList(): ReactElement {
 							className={'yearn--button-smaller'}>
 							{'Legacy'}
 						</Button>
+					</div>
+					<div className={'flex flex-row space-x-4 md:hidden'}>
+						<select
+							className={'yearn--button-smaller border-none bg-neutral-900 text-neutral-0'}
+							onChange={(e): void => set_category(e.target.value)}>
+							<option value={'claimable'}>{'Claimable'}</option>
+							<option value={'all'}>{'All'}</option>
+							<option value={'v2'}>{'Legacy'}</option>
+						</select>
 					</div>
 				</div>
 				<div className={'grid w-full grid-cols-1 pb-2 md:pb-4'}>

@@ -78,7 +78,7 @@ function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactEleme
 				</div>
 			</div>
 
-			<div className={'col-span-2 grid grid-cols-10 gap-10 md:col-span-5'}>
+			<div className={'col-span-2 grid grid-cols-8 gap-0 md:col-span-5 md:grid-cols-10 md:gap-10'}>
 
 				<div className={'col-span-8 flex h-16 flex-row justify-between pt-6 md:col-span-2 md:justify-end'}>
 					<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Weight'}</label>
@@ -87,7 +87,7 @@ function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactEleme
 					</p>
 				</div>
 
-				<div className={'col-span-8 flex flex-row justify-between pr-0 pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0 md:pr-0'}>
+				<div className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0'}>
 					<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Current Bribes'}</label>
 					{
 						!currentRewardsForCurrentGaugeMap || currentRewardsForCurrentGaugeMap.length === 0 ? (
@@ -108,7 +108,7 @@ function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactEleme
 					}
 				</div>
 
-				<div className={'col-span-8 flex flex-row justify-between pr-0 pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0 md:pr-0'}>
+				<div className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0'}>
 					<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Current Bribes'}</label>
 					{
 						!nextRewardsForCurrentGaugeMap || nextRewardsForCurrentGaugeMap.length === 0 ? (

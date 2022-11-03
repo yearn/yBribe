@@ -140,25 +140,10 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 					</div>
 					<p>{currentGauge.name}</p>
 				</div>
-				<div className={'flex md:hidden'}>
-					{
-						currentRewardsForCurrentGaugeMap.map(([key]: [string, BigNumber]): ReactElement => (
-							<div key={`claim-${key}`} className={'h-16 pt-4 md:pt-7'}>
-								<Button
-									className={'yearn--button-smaller w-full'}
-									onClick={(): void => onClaimReward(key)}
-									isBusy={txStatusClaim.pending}
-									isDisabled={!isActive || !hasSomethingToClaim}>
-									{'Claim'}
-								</Button>
-							</div>
-						))
-					}
-				</div>
 			</div>
 
-			<div className={'col-span-2 grid grid-cols-10 gap-10 md:col-span-5'}>
-				<div className={'col-span-2'}>
+			<div className={'col-span-2 grid grid-cols-2 gap-0 md:col-span-5 md:grid-cols-10 md:gap-10'}>
+				<div className={'col-span-2 hidden md:block'}>
 					<div
 						aria-label={'current rewards'}
 						className={'col-span-8 flex flex-row justify-end pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0'}>
@@ -179,7 +164,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 					</div>
 				</div>
 
-				<div className={'col-span-2'}>
+				<div className={'col-span-2 mb-0 md:mb-0'}>
 					<div
 						aria-label={'current rewards'}
 						className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0'}>
@@ -230,11 +215,11 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 					</div>
 				</div>
 
-				<div className={'col-span-2'}>
+				<div className={'col-span-2 mb-4 md:mb-0'}>
 					<div
 						aria-label={'current APR'}
 						className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-1 md:flex-col md:justify-start md:pt-0'}>
-						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'APR'}</label>
+						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Current APR'}</label>
 						{
 							!currentRewardsForCurrentGaugeMap || currentRewardsForCurrentGaugeMap.length === 0 ? (
 								<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
@@ -254,7 +239,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 					<div
 						aria-label={'pending APR'}
 						className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-1 md:flex-col md:justify-start md:pt-0'}>
-						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'APR'}</label>
+						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Pending APR'}</label>
 						{
 							!nextRewardsForCurrentGaugeMap || nextRewardsForCurrentGaugeMap.length === 0 ? (
 								<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
@@ -273,7 +258,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 				</div>
 
 				<div className={'col-span-2'}>
-					<div className={'col-span-8 flex flex-row justify-between md:col-span-2 md:flex-col md:justify-start'}>
+					<div className={'col-span-8 flex flex-row items-center justify-between md:col-span-2 md:flex-col md:items-start md:justify-start'}>
 						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Claimable'}</label>
 						{
 							!claimableForCurrentGaugeMap || claimableForCurrentGaugeMap.length === 0 ? (
@@ -286,10 +271,21 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 									</p>
 								</div>
 							) : claimableForCurrentGaugeMap.map(([key, value]: [string, BigNumber]): ReactElement => (
-								<GaugeRowItemWithExtraData
-									key={`claimable-${currentGauge.gauge}-${key}`}
-									address={toAddress(key)}
-									value={value} />
+								<>
+									<GaugeRowItemWithExtraData
+										key={`claimable-${currentGauge.gauge}-${key}`}
+										address={toAddress(key)}
+										value={value} />
+									<div key={`claim-${key}`} className={'h-auto pt-0 md:h-16 md:pt-7'}>
+										<Button
+											className={'yearn--button-smaller w-full'}
+											onClick={(): void => onClaimReward(key)}
+											isBusy={txStatusClaim.pending}
+											isDisabled={!isActive || !hasSomethingToClaim}>
+											{'Claim'}
+										</Button>
+									</div>
+								</>
 							))
 						}
 					</div>
