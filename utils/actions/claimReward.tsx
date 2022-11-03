@@ -3,11 +3,11 @@ import {ethers} from 'ethers';
 export async function	claimReward(
 	provider: ethers.providers.Web3Provider,
 	contractAddress: string,
-	user: string,
 	gauge: string,
 	token: string
 ): Promise<boolean> {
 	const	signer = provider.getSigner();
+	const	user = await signer.getAddress();
 
 	try {
 		const	contract = new ethers.Contract(

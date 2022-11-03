@@ -117,7 +117,6 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 	function	onClaimReward(token: string): void {
 		new Transaction(provider, claimReward, set_txStatusClaim).populate(
 			category === 'v2' ? process.env.CURVE_BRIBE_V2_ADDRESS as string : process.env.CURVE_BRIBE_V3_ADDRESS as string,
-			address,
 			currentGauge.gauge,
 			token
 		).onSuccess(async (): Promise<void> => {
