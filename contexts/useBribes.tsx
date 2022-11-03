@@ -40,9 +40,14 @@ const	defaultProps: TBribesContext = {
 };
 
 function	getLastThursday(): number {
-	const	lastThursday = new Date();
-	lastThursday.setDate(lastThursday.getDate() - ((lastThursday.getDay() + 6) % 7) - 3);
-	lastThursday.setHours(-22, 0, 0, 0); // Adapt to timezone
+	// Retrieve the timestamp of the last Thursday at 00:00:00 UTC.
+	// If today is Thursday, return the timestamp of today at 00:00:00 UTC.
+	const	oneDay = 86400;
+	const	today = new Date();
+	const	day = today.getDay();
+	const	utc = today.getTime() - (today.getTimezoneOffset() * 60000);
+	const	lastThursday = new Date(utc + (oneDay * (day === 4 ? 0 : 4 - day)));
+	lastThursday.setUTCHours(0, 0, 0, 0);
 	return Math.floor(lastThursday.getTime() / 1000);
 }
 
