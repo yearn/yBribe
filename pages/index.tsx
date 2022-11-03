@@ -58,18 +58,6 @@ function	GaugeList(): ReactElement {
 						<h2 className={'text-lg font-bold md:text-3xl'}>{'Claim Bribe'}</h2>
 					</div>
 					<div className={'hidden flex-row space-x-4 md:flex'}>
-						<div className={'flex h-8 items-center border border-neutral-0 bg-neutral-0 p-2'}>
-							<div className={'flex h-8 w-full flex-row items-center justify-between py-2 px-0'}>
-								<input
-									className={'w-full overflow-x-scroll border-none bg-transparent py-2 px-0 text-xs outline-none scrollbar-none'}
-									type={'text'}
-									placeholder={'Search'}
-									value={searchValue}
-									onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-										set_searchValue(e.target.value);
-									}} />
-							</div>
-						</div>
 						<Button
 							onClick={(): void => set_category('claimable')}
 							variant={category === 'claimable' ? 'filled' : 'outlined'}
@@ -88,8 +76,6 @@ function	GaugeList(): ReactElement {
 							className={'yearn--button-smaller'}>
 							{'Legacy'}
 						</Button>
-					</div>
-					<div className={'flex w-2/3 flex-row space-x-2 md:hidden'}>
 						<div className={'flex h-8 items-center border border-neutral-0 bg-neutral-0 p-2'}>
 							<div className={'flex h-8 w-full flex-row items-center justify-between py-2 px-0'}>
 								<input
@@ -102,6 +88,8 @@ function	GaugeList(): ReactElement {
 									}} />
 							</div>
 						</div>
+					</div>
+					<div className={'flex w-2/3 flex-row space-x-2 md:hidden'}>
 						<select
 							className={'yearn--button-smaller !w-[120%] border-none bg-neutral-900 text-neutral-0'}
 							onChange={(e): void => set_category(e.target.value)}>
@@ -109,6 +97,18 @@ function	GaugeList(): ReactElement {
 							<option value={'all'}>{'All'}</option>
 							<option value={'v2'}>{'Legacy'}</option>
 						</select>
+						<div className={'flex h-8 items-center border border-neutral-0 bg-neutral-0 p-2'}>
+							<div className={'flex h-8 w-full flex-row items-center justify-between py-2 px-0'}>
+								<input
+									className={'w-full overflow-x-scroll border-none bg-transparent py-2 px-0 text-xs outline-none scrollbar-none'}
+									type={'text'}
+									placeholder={'Search'}
+									value={searchValue}
+									onChange={(e: ChangeEvent<HTMLInputElement>): void => {
+										set_searchValue(e.target.value);
+									}} />
+							</div>
+						</div>
 					</div>
 				</div>
 				<div className={'grid w-full grid-cols-1 pb-2 md:pb-4'}>
