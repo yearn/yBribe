@@ -23,7 +23,7 @@ function	GaugeRowItemWithExtraData({
 	const	decimals = tokenInfo?.decimals || 18;
 	const	symbol = tokenInfo?.symbol || '???';
 	const	bribeAmount = format.toNormalizedValue(format.BN(value), decimals);
-	const	bribeValue = bribeAmount * (Number(tokenPrice || 0) / 1000000);
+	const	bribeValue = bribeAmount * (Number(tokenPrice || 0) / 100);
 
 	return (
 		<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
@@ -196,7 +196,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 							!nextRewardsForCurrentGaugeMap || nextRewardsForCurrentGaugeMap.length === 0 ? (
 								<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
 									<p className={'inline-flex items-baseline text-base tabular-nums text-neutral-900'}>
-										{'$ 0.000000'}
+										{'$ 0.00'}
 									</p>
 									<p className={'inline-flex items-baseline text-right text-xs tabular-nums text-neutral-400'}>
 										{'-'}
