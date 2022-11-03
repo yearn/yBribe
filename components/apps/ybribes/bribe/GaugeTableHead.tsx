@@ -16,14 +16,14 @@ function	GaugeTableHead(): ReactElement {
 				<div
 					className={'group col-span-3 flex flex-row items-center justify-end space-x-1 pr-0'}>
 					<p className={'text-end text-base text-neutral-400'}>
-						{'Current Rewards'}
+						{'Current $/10k veCRV'}
 					</p>
 				</div>
 
 				<div
 					className={'group col-span-3 flex flex-row items-center justify-end space-x-1 pr-0'}>
 					<p className={'text-end text-base text-neutral-400'}>
-						{'Pending Rewards'}
+						{'Pending $/10k veCRV'}
 					</p>
 				</div>
 

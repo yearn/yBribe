@@ -11,15 +11,26 @@ export async function	claimReward(
 
 	try {
 		const	contract = new ethers.Contract(
-			contractAddress,
-			['function claim_reward(address, address, address)'],
+			contractAddress, [
+				'function claim_reward(address, address, address)',
+				'function claim_reward_for(address, address, address)'
+			],
 			signer
 		);
-		const	transaction = await contract.claim_reward(user, gauge, token);
-		const	transactionResult = await transaction.wait();
-		if (transactionResult.status === 0) {
-			console.error('Fail to perform transaction');
-			return false;
+		if (contractAddress === process.env.CURVE_BRIBE_V3_ADDRESS) {
+			const	transaction = await contract.claim_reward_for(user, gauge, token);
+			const	transactionResult = await transaction.wait();
+			if (transactionResult.status === 0) {
+				console.error('Fail to perform transaction');
+				return false;
+			}
+		} else {
+			const	transaction = await contract.claim_reward(user, gauge, token);
+			const	transactionResult = await transaction.wait();
+			if (transactionResult.status === 0) {
+				console.error('Fail to perform transaction');
+				return false;
+			}
 		}
 
 		return true;

@@ -106,7 +106,7 @@ function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactEleme
 							<GaugeRowItemWithExtraData
 								key={`rewards-${currentGauge.gauge}-${key}`}
 								address={toAddress(key)}
-								value={value} />
+								value={value.mul(10000)} />
 						))
 					}
 				</div>
@@ -127,7 +127,7 @@ function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactEleme
 							<GaugeRowItemWithExtraData
 								key={`rewards-${currentGauge.gauge}-${key}`}
 								address={toAddress(key)}
-								value={value} />
+								value={value.mul(10000)} />
 						))
 					}
 				</div>

@@ -9,7 +9,7 @@ function	GaugeTableHead(): ReactElement {
 				<div
 					className={'group col-span-2 flex flex-row items-center justify-end space-x-1'}>
 					<p className={'text-end text-base text-neutral-400'}>
-						{'$/1000veCRV'}
+						{'$/10k veCRV'}
 					</p>
 				</div>
 
