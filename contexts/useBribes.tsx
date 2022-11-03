@@ -4,7 +4,7 @@ import {BigNumber, ethers} from 'ethers';
 import {useWeb3} from '@yearn-finance/web-lib/contexts';
 import {performBatchedUpdates, providers, toAddress} from '@yearn-finance/web-lib/utils';
 import {useCurve} from 'contexts/useCurve';
-import {allowanceKey} from 'utils';
+import {allowanceKey, getLastThursday, getNextThursday} from 'utils';
 import CURVE_BRIBE_V2 from 'utils/abi/curveBribeV2.abi';
 import CURVE_BRIBE_V3 from 'utils/abi/curveBribeV3.abi';
 import CURVE_BRIBE_V3_HELPER from 'utils/abi/curveBribeV3Helper.abi';
@@ -39,18 +39,6 @@ const	defaultProps: TBribesContext = {
 	refresh: async (): Promise<void> => undefined
 };
 
-function	getLastThursday(): number {
-	// Retrieve the timestamp of the last Thursday at 00:00:00 UTC.
-	// If today is Thursday, return the timestamp of today at 00:00:00 UTC.
-	const	oneDay = 86400;
-	const	today = new Date();
-	const	day = today.getDay();
-	const	utc = today.getTime() - (today.getTimezoneOffset() * 60000);
-	const	lastThursday = new Date(utc + (oneDay * (day === 4 ? 0 : 4 - day)));
-	lastThursday.setUTCHours(0, 0, 0, 0);
-	return Math.floor(lastThursday.getTime() / 1000);
-}
-
 const	BribesContext = createContext<TBribesContext>(defaultProps);
 export const BribesContextApp = ({children}: {children: React.ReactElement}): React.ReactElement => {
 	const	{gauges} = useCurve();
@@ -60,7 +48,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	const	[claimable, set_claimable] = useState<TCurveGaugeVersionRewards>({v2: {}, v3: {}});
 	const	[isLoading, set_isLoading] = useState<boolean>(true);
 	const	[currentPeriod, set_currentPeriod] = useState<number>(getLastThursday());
-	const	[nextPeriod, set_nextPeriod] = useState<number>(getLastThursday() + (86400 * 7));
+	const	[nextPeriod, set_nextPeriod] = useState<number>(getNextThursday());
 
 	/* 🔵 - Yearn Finance ******************************************************
 	**	getSharedStuffFromBribes will help you retrieved some elements from the

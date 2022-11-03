@@ -1,23 +1,13 @@
 import React, {ReactElement, useCallback, useEffect, useRef, useState} from 'react';
+import {useBribes} from 'contexts/useBribes';
 import dayjs, {extend} from 'dayjs';
 import dayjsDuration from 'dayjs/plugin/duration.js';
+import {getNextThursday} from 'utils';
 
 extend(dayjsDuration);
 
-function	getLastThursday(): number {
-	// Retrieve the timestamp of the last Thursday at 00:00:00 UTC.
-	// If today is Thursday, return the timestamp of today at 00:00:00 UTC.
-	const	oneDay = 86400;
-	const	today = new Date();
-	const	day = today.getDay();
-	const	utc = today.getTime() - (today.getTimezoneOffset() * 60000);
-	const	lastThursday = new Date(utc + (oneDay * (day === 4 ? 0 : 4 - day)));
-	lastThursday.setUTCHours(0, 0, 0, 0);
-	return Math.floor(lastThursday.getTime() / 1000);
-}
-
 function	computeTimeLeft(): number {
-	const	nextPeriod = getLastThursday() + (86400 * 7);
+	const nextPeriod = getNextThursday();
 	const currentTime = dayjs();
 	const diffTime = nextPeriod - currentTime.unix();
 	const duration = dayjs.duration(diffTime * 1000, 'milliseconds');
@@ -25,8 +15,7 @@ function	computeTimeLeft(): number {
 }
 
 function	HeroTimer(): ReactElement {
-	// const	{nextPeriod} = useBribes();
-	const	nextPeriod = getLastThursday() + (86400 * 7);
+	const	{nextPeriod} = useBribes();
 	const	interval = useRef<NodeJS.Timeout | null>(null);
 	const	[time, set_time] = useState<number>(computeTimeLeft());
 
@@ -55,7 +44,7 @@ function	HeroTimer(): ReactElement {
 	}, []);
 
 	return (
-		<b className={'tabular-nums'}>
+		<b className={'tabular-nums'} suppressHydrationWarning={true}>
 			{time ? formatTimestamp(time) : '00H 00M 00S'}
 		</b>
 	);

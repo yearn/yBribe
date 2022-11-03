@@ -29,3 +29,19 @@ export function	getCounterValue(amount: number | string, price: number): string 
 	}
 	return (`$${format.amount(value, 2, 2)}`);
 }
+
+export function	getLastThursday(): number {
+	// Retrieve the timestamp of the last Thursday at 00:00:00 UTC.
+	// If today is Thursday, return the timestamp of today at 00:00:00 UTC.
+	const	oneDay = 86400;
+	const	today = new Date();
+	const	day = today.getDay();
+	const	utc = today.getTime() - (today.getTimezoneOffset() * 60000);
+	const	lastThursday = new Date(utc + (oneDay * (day === 4 ? 0 : 4 - day)));
+	lastThursday.setUTCHours(0, 0, 0, 0);
+	return Math.floor(lastThursday.getTime() / 1000);
+}
+
+export function	getNextThursday(): number {
+	return getLastThursday() + (86400 * 7);
+}
