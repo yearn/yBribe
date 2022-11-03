@@ -84,7 +84,7 @@ function	GaugeRowItemAPR({address, value, isV2}: {address: string, value: BigNum
 
 
 function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, category: string}): ReactElement {
-	const	{isActive, address, provider} = useWeb3();
+	const	{isActive, provider} = useWeb3();
 	const	{currentRewards, nextRewards, claimable, refresh} = useBribes();
 	const	[txStatusClaim, set_txStatusClaim] = useState(defaultTxStatus);
 
