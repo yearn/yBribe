@@ -258,7 +258,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 				</div>
 
 				<div className={'col-span-2'}>
-					<div className={'col-span-8 flex flex-row items-center justify-between md:col-span-2 md:flex-col md:items-start md:justify-start'}>
+					<div className={'col-span-8 flex flex-row items-center justify-between md:col-span-2 md:flex-col md:items-end md:justify-start'}>
 						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Claimable'}</label>
 						{
 							!claimableForCurrentGaugeMap || claimableForCurrentGaugeMap.length === 0 ? (
@@ -276,7 +276,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 										key={`claimable-${currentGauge.gauge}-${key}`}
 										address={toAddress(key)}
 										value={value} />
-									<div key={`claim-${key}`} className={'h-auto pt-0 md:h-16 md:pt-7'}>
+									<div key={`claim-${key}`} className={'block h-auto pt-0 md:hidden md:h-16 md:pt-7'}>
 										<Button
 											className={'yearn--button-smaller w-full'}
 											onClick={(): void => onClaimReward(key)}
