@@ -49,7 +49,7 @@ function	getLastThursday(): number {
 const	BribesContext = createContext<TBribesContext>(defaultProps);
 export const BribesContextApp = ({children}: {children: React.ReactElement}): React.ReactElement => {
 	const	{gauges} = useCurve();
-	const	{provider, address} = useWeb3();
+	const	{provider, address, chainID} = useWeb3();
 	const	[currentRewards, set_currentRewards] = useState<TCurveGaugeVersionRewards>({v2: {}, v3: {}});
 	const	[nextRewards, set_nextRewards] = useState<TCurveGaugeVersionRewards>({v2: {}, v3: {}});
 	const	[claimable, set_claimable] = useState<TCurveGaugeVersionRewards>({v2: {}, v3: {}});
@@ -62,7 +62,8 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	** 	Bribe contracts, not related to the user.
 	***************************************************************************/
 	const	getSharedStuffFromBribes = useCallback(async (): Promise<void> => {
-		const	currentProvider = provider || providers.getProvider(1);
+		const	safeChainID = chainID === 1337 ? 1 : chainID;
+		const	currentProvider = safeChainID === 1 ? provider || providers.getProvider(1) : providers.getProvider(1);
 		const	ethcallProvider = await providers.newEthCallProvider(currentProvider);
 		const	curveBribeV3Contract = new Contract(process.env.CURVE_BRIBE_V3_ADDRESS as string, CURVE_BRIBE_V3);
 		const	[_currentPeriod] = await ethcallProvider.tryAll([curveBribeV3Contract.current_period()]) as [number];	
@@ -71,7 +72,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 			set_currentPeriod(Number(_currentPeriod));
 			set_nextPeriod(Number(_currentPeriod) + (86400 * 7));
 		});
-	}, [provider]);
+	}, [provider, chainID]);
 	useEffect((): void => {
 		getSharedStuffFromBribes();
 	}, [getSharedStuffFromBribes]);
@@ -81,8 +82,10 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	**	getBribes will call the bribeV2 contract to get all the rewards
 	**	per gauge.
 	***************************************************************************/
-	const getRewardsPerGauges = useCallback(async (contract: Contract): Promise<string[][]> => {
-		const	currentProvider = provider || providers.getProvider(1);
+	const getRewardsPerGauges = useCallback(async (
+		currentProvider: ethers.providers.Web3Provider,
+		contract: Contract
+	): Promise<string[][]> => {
 		const	ethcallProvider = await providers.newEthCallProvider(currentProvider);
 		const	rewardsPerGaugesCalls = [];
 
@@ -91,7 +94,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 		}
 		const	_rewardsPerGauges = await ethcallProvider.tryAll(rewardsPerGaugesCalls) as string[][];
 		return ([..._rewardsPerGauges]);
-	}, [provider, gauges]);
+	}, [gauges]);
 
 	/* 🔵 - Yearn Finance ******************************************************
 	**	getRewardsPerUser will help you retrieved the claimable and rewards
@@ -99,6 +102,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	** 	list of gauges/tokens.
 	***************************************************************************/
 	const getRewardsPerUser = useCallback(async (
+		currentProvider: ethers.providers.Web3Provider,
 		contract: Contract,
 		rewardsPerGauges: string[][]
 	): Promise<{rewardsList: string[], multicallResult: any[]}> => {
@@ -106,7 +110,6 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 			return ({rewardsList: [], multicallResult: []});
 		}
 		const	userAddress = address || ethers.constants.AddressZero;
-		const	currentProvider = provider || providers.getProvider(1);
 		const	ethcallProvider = await providers.newEthCallProvider(currentProvider);
 		const	rewardsPerTokensPerGaugesCalls = [];
 		const	rewardsList: string[] = [];
@@ -132,7 +135,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 
 		const	_rewardsPerTokensPerGaugesWithPeriods = await ethcallProvider.tryAll(rewardsPerTokensPerGaugesCalls) as BigNumber[];
 		return ({rewardsList, multicallResult: [..._rewardsPerTokensPerGaugesWithPeriods]});
-	}, [provider, gauges, address]);
+	}, [gauges, address]);
 
 	/* 🔵 - Yearn Finance ******************************************************
 	**	getNextPeriodRewards will help you retrieved the the reward_per_gauge
@@ -140,12 +143,12 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	** 	able to calculate the next period rewards.
 	***************************************************************************/
 	const getNextPeriodRewards = useCallback(async (
+		currentProvider: ethers.providers.Web3Provider,
 		rewardsPerGauges: string[][]
 	): Promise<{rewardsList: string[], multicallResult: any[]}> => {
 		if ((rewardsPerGauges || []).length === 0) {
 			return ({rewardsList: [], multicallResult: []});
 		}
-		const	currentProvider = provider || providers.getProvider(1);
 		const	contract = new ethers.Contract(process.env.CURVE_BRIBE_V3_HELPER_ADDRESS as string, CURVE_BRIBE_V3_HELPER, currentProvider);
 		const	rewardsPerTokensPerGaugesCalls = [];
 		const	rewardsList: string[] = [];
@@ -163,13 +166,17 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 
 		const	multicallResult = await Promise.all(rewardsPerTokensPerGaugesCalls.map((pair): any => contract.callStatic.getNewRewardPerToken(...pair))) as BigNumber[];
 		return ({rewardsList, multicallResult: [...multicallResult]});
-	}, [provider, gauges]);
+	}, [gauges]);
 
 	/* 🔵 - Yearn Finance ******************************************************
 	**	assignBribes will save the currentRewards,  periods and clamable values
 	** 	for each gauge/token to the state to be used by the UI.
 	***************************************************************************/
-	const assignBribes = useCallback(async (version: string, rewardsList: string[], multicallResult: any[]): Promise<void> => {
+	const assignBribes = useCallback(async (
+		version: string,
+		rewardsList: string[],
+		multicallResult: any[]
+	): Promise<void> => {
 		if (!multicallResult || multicallResult.length === 0 || rewardsList.length === 0) {
 			return;
 		}
@@ -233,17 +240,19 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	**	getBribes will start the process to retrieve the bribe information.
 	***************************************************************************/
 	const	getBribes = useCallback(async (): Promise<void> => {
+		const	safeChainID = chainID === 1337 ? 1 : chainID;
+		const	currentProvider = safeChainID === 1 ? provider || providers.getProvider(1) : providers.getProvider(1);
 		const	curveBribeV2Contract = new Contract(process.env.CURVE_BRIBE_V2_ADDRESS as string, CURVE_BRIBE_V2);
 		const	curveBribeV3Contract = new Contract(process.env.CURVE_BRIBE_V3_ADDRESS as string, CURVE_BRIBE_V3);
 
 		const	[rewardsPerGaugesV2, rewardsPerGaugesV3] = await Promise.all([
-			getRewardsPerGauges(curveBribeV2Contract),
-			getRewardsPerGauges(curveBribeV3Contract)
+			getRewardsPerGauges(currentProvider, curveBribeV2Contract),
+			getRewardsPerGauges(currentProvider, curveBribeV3Contract)
 		]);
 		const	[rewardsPerUserV2, rewardsPerUserV3, nextPeriodRewardsV3] = await Promise.all([
-			getRewardsPerUser(curveBribeV2Contract, rewardsPerGaugesV2),
-			getRewardsPerUser(curveBribeV3Contract, rewardsPerGaugesV3),
-			getNextPeriodRewards(rewardsPerGaugesV3)
+			getRewardsPerUser(currentProvider, curveBribeV2Contract, rewardsPerGaugesV2),
+			getRewardsPerUser(currentProvider, curveBribeV3Contract, rewardsPerGaugesV3),
+			getNextPeriodRewards(currentProvider, rewardsPerGaugesV3)
 		]);
 
 		const	{rewardsList: rewardsListV2, multicallResult: multicallResultV2} = rewardsPerUserV2;
@@ -254,7 +263,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 			assignBribes('v3', rewardsListV3, multicallResultV3);
 			assignNextRewards('v3', nextRewardsListV3, nextMulticallResultV3);
 		});
-	}, [getRewardsPerGauges, getRewardsPerUser, getNextPeriodRewards, assignBribes, assignNextRewards]);
+	}, [chainID, provider, getRewardsPerGauges, getRewardsPerUser, getNextPeriodRewards, assignBribes, assignNextRewards]);
 	useEffect((): void => {
 		getBribes();
 	}, [getBribes]);

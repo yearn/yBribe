@@ -2,6 +2,7 @@ import React, {ReactElement, useMemo, useState} from 'react';
 import Image from 'next/image';
 import {BigNumber, ethers} from 'ethers';
 import {Button, Modal} from '@yearn-finance/web-lib/components';
+import {useWeb3} from '@yearn-finance/web-lib/contexts';
 import {format, toAddress} from '@yearn-finance/web-lib/utils';
 import {GaugeBribeModal} from 'components/apps/ybribes/bribe/GaugeBribeModal';
 import {useBribes} from 'contexts/useBribes';
@@ -34,6 +35,7 @@ function	GaugeRowItemWithExtraData({address, value}: {address: string, value: Bi
 }
 
 function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactElement {
+	const	{isActive} = useWeb3();
 	const	{currentRewards, nextRewards} = useBribes();
 	const	[hasModal, set_hasModal] = useState(false);
 
@@ -71,6 +73,7 @@ function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactEleme
 					<div className={'h-16 pt-4 md:pt-7'}>
 						<Button
 							className={'yearn--button-smaller w-full'}
+							isDisabled={!isActive}
 							onClick={(): void => set_hasModal(true)}>
 							{'Bribe'}
 						</Button>
@@ -133,6 +136,7 @@ function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactEleme
 					<div className={'h-16 pt-7'}>
 						<Button
 							className={'yearn--button-smaller w-full'}
+							isDisabled={!isActive}
 							onClick={(): void => set_hasModal(true)}>
 							{'Bribe'}
 						</Button>
