@@ -1,9 +1,9 @@
 import React, {ReactElement, useMemo, useState} from 'react';
-import Image from 'next/image';
 import {BigNumber} from 'ethers';
 import {Button} from '@yearn-finance/web-lib/components';
 import {useWeb3} from '@yearn-finance/web-lib/contexts';
 import {defaultTxStatus, format, toAddress, Transaction} from '@yearn-finance/web-lib/utils';
+import {ImageWithFallback} from 'components/common/ImageWithFallback';
 import {useBribes} from 'contexts/useBribes';
 import {useYearn} from 'contexts/useYearn';
 import {claimReward} from 'utils/actions/claimReward';
@@ -130,7 +130,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 			<div className={'col-span-2 mb-2 flex h-16 flex-row items-center justify-between pt-6 md:col-span-2 md:mb-0'}>
 				<div className={'flex flex-row items-center space-x-2 md:space-x-6'}>
 					<div className={'flex h-6 w-6 rounded-full md:flex md:h-10 md:w-10'}>
-						<Image
+						<ImageWithFallback
 							alt={''}
 							width={40}
 							height={40}
@@ -168,7 +168,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 					<div
 						aria-label={'current rewards'}
 						className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0'}>
-						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Current Rewards'}</label>
+						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Current Rewards per 1000veCRV'}</label>
 						{
 							!currentRewardsForCurrentGaugeMap || currentRewardsForCurrentGaugeMap.length === 0 ? (
 								<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
@@ -182,17 +182,17 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 							) : currentRewardsForCurrentGaugeMap.map(([key, value]: [string, BigNumber]): ReactElement => (
 								<GaugeRowItemWithExtraData
 									isV2={category === 'v2'}
-									minDecimals={5}
+									minDecimals={2}
 									key={`current-rewards-${currentGauge.gauge}-${key}`}
 									address={toAddress(key)}
-									value={category === 'v2' ? value.div(126144000) : value} />
+									value={category === 'v2' ? value.div(126144000) : value.mul(1000)} />
 							))
 						}
 					</div>
 					<div
 						aria-label={'pending rewards'}
 						className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0'}>
-						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Pending Rewards'}</label>
+						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Pending Rewards per 1000veCRV'}</label>
 						{
 							!nextRewardsForCurrentGaugeMap || nextRewardsForCurrentGaugeMap.length === 0 ? (
 								<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
@@ -206,10 +206,10 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 							) : nextRewardsForCurrentGaugeMap.map(([key, value]: [string, BigNumber]): ReactElement => (
 								<GaugeRowItemWithExtraData
 									isV2={category === 'v2'}
-									minDecimals={5}
+									minDecimals={2}
 									key={`pending-rewards-${currentGauge.gauge}-${key}`}
 									address={toAddress(key)}
-									value={category === 'v2' ? value.div(126144000) : value} />
+									value={category === 'v2' ? value.div(126144000) : value.mul(1000)} />
 							))
 						}
 					</div>

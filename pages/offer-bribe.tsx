@@ -50,7 +50,7 @@ function	GaugeList(): ReactElement {
 				<div className={'grid w-full grid-cols-1 pb-2 md:pb-4'}>
 					<GaugeTableHead />
 					{sortedGauges.length === 0 ? (
-						<GaugeTableEmpty category={category} />
+						<GaugeTableEmpty />
 					) : sortedGauges.map((gauge): ReactNode => {
 						if (!gauge) {
 							return (null);

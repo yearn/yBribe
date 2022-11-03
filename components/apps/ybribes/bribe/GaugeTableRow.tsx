@@ -1,10 +1,10 @@
 import React, {ReactElement, useMemo, useState} from 'react';
-import Image from 'next/image';
 import {BigNumber, ethers} from 'ethers';
 import {Button, Modal} from '@yearn-finance/web-lib/components';
 import {useWeb3} from '@yearn-finance/web-lib/contexts';
 import {format, toAddress} from '@yearn-finance/web-lib/utils';
 import {GaugeBribeModal} from 'components/apps/ybribes/bribe/GaugeBribeModal';
+import {ImageWithFallback} from 'components/common/ImageWithFallback';
 import {useBribes} from 'contexts/useBribes';
 import {useYearn} from 'contexts/useYearn';
 
@@ -59,13 +59,13 @@ function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactEleme
 			<div className={'col-span-2 mb-2 flex h-16 flex-row items-center justify-between pt-6 md:col-span-2 md:mb-0'}>
 				<div className={'flex flex-row items-center space-x-2 md:space-x-6'}>
 					<div className={'flex h-6 w-6 rounded-full md:flex md:h-10 md:w-10'}>
-						<Image
+						<ImageWithFallback
 							alt={''}
 							width={40}
 							height={40}
 							quality={90}
-							src={`${process.env.BASE_YEARN_ASSETS_URI}/1/${toAddress(currentGauge.swap_token)}/logo-128.png`}
-							loading={'eager'} />
+							loading={'eager'}
+							src={`${process.env.BASE_YEARN_ASSETS_URI}1/${toAddress(currentGauge.swap_token)}/logo-128.png`} />
 					</div>
 					<p>{currentGauge.name}</p>
 				</div>

@@ -16,7 +16,7 @@ import type {TNormalizedBN} from 'types/types.d';
 
 
 function	GaugeBribeModal({currentGauge, onClose}: {currentGauge: TCurveGauges, onClose: VoidFunction}): ReactElement {
-	const	{address, provider, isActive} = useWeb3();
+	const	{chainID, address, provider, isActive, openLoginModal, onSwitchChain} = useWeb3();
 	const	{refresh} = useBribes();
 	const	{prices} = useYearn();
 	const	[amount, set_amount] = useState<TNormalizedBN>({raw: ethers.constants.Zero, normalized: 0});
@@ -34,7 +34,8 @@ function	GaugeBribeModal({currentGauge, onClose}: {currentGauge: TCurveGauges, o
 		raw: BigNumber,
 		allowance: BigNumber,
 	}> => {
-		const	currentProvider = provider || providers.getProvider(1);
+		const	safeChainID = chainID === 1337 ? 1 : chainID;
+		const	currentProvider = safeChainID === 1 ? provider || providers.getProvider(1) : providers.getProvider(1);
 		const	ethcallProvider = await providers.newEthCallProvider(currentProvider);
 		const	erc20Contract = new Contract(_tokenAddress, ABI.ERC20_ABI);
 
@@ -54,7 +55,7 @@ function	GaugeBribeModal({currentGauge, onClose}: {currentGauge: TCurveGauges, o
 			normalized: format.toNormalizedValue(balance, decimals),
 			allowance
 		});
-	}, [address, provider]);
+	}, [chainID, address, provider]);
 
 	/* 🔵 - Yearn Finance ******************************************************
 	** SWR hook to get the expected out for a given in/out pair with a specific
@@ -89,13 +90,36 @@ function	GaugeBribeModal({currentGauge, onClose}: {currentGauge: TCurveGauges, o
 	}
 
 	function renderButton(): ReactElement {
+		if (!isActive) {
+			return (
+				<Button
+					onClick={openLoginModal}
+					className={'w-full'}>
+					{'Connect wallet'}
+				</Button>
+			);
+		}
+		if (![1, 1337].includes(chainID)) {
+			return (
+				<Button
+					onClick={(): void => onSwitchChain(1, true)}
+					className={'w-full'}>
+					{'Switch to Ethereum Mainnet'}
+				</Button>
+			);
+		}
 		if (txStatusApprove.pending || amount.raw.gt(selectedToken?.allowance || 0)) {
 			return (
 				<Button
 					onClick={onApproveFrom}
 					className={'w-full'}
 					isBusy={txStatusApprove.pending}
-					isDisabled={!isActive || isZeroAddress(tokenAddress) || amount.raw.isZero()}>
+					isDisabled={
+						!isActive ||
+						isZeroAddress(tokenAddress) ||
+						amount.raw.isZero() ||
+						![1, 1337].includes(chainID)
+					}>
 					{`Approve ${selectedToken?.symbol || 'token'}`}
 				</Button>
 			);
@@ -106,7 +130,13 @@ function	GaugeBribeModal({currentGauge, onClose}: {currentGauge: TCurveGauges, o
 				onClick={onAddReward}
 				className={'w-full'}
 				isBusy={txStatusAddReward.pending}
-				isDisabled={!isActive || isZeroAddress(tokenAddress) || amount.raw.isZero()}>
+				isDisabled={
+					!isActive ||
+					isZeroAddress(tokenAddress) ||
+					amount.raw.isZero() ||
+					amount.raw.gt(selectedToken?.raw || ethers.constants.Zero) ||
+					![1, 1337].includes(chainID)
+				}>
 				{'Deposit'}
 			</Button>
 		);
@@ -134,10 +164,13 @@ function	GaugeBribeModal({currentGauge, onClose}: {currentGauge: TCurveGauges, o
 									placeholder={'0x...'}
 									value={tokenAddress}
 									onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-										if (isZeroAddress(e.target.value)) {
-											set_tokenAddress(e.target.value);
-										} else {
-											set_tokenAddress(toAddress(e.target.value));
+										const	{value} = e.target;
+										if (value === '' || value.match(/^(0[x]{0,1})[a-fA-F0-9]{0,40}/gm)?.includes(value)) {
+											if (isZeroAddress(value)) {
+												set_tokenAddress(value);
+											} else {
+												set_tokenAddress(toAddress(value));
+											}
 										}
 									}} />
 							</div>
