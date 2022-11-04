@@ -167,12 +167,12 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 					<div
 						aria-label={'current rewards'}
 						className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0'}>
-						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Current Rewards per 10000veCRV'}</label>
+						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Current Rewards per 1000veCRV'}</label>
 						{
 							!currentRewardsForCurrentGaugeMap || currentRewardsForCurrentGaugeMap.length === 0 ? (
 								<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
 									<p className={'inline-flex items-baseline text-base tabular-nums text-neutral-900'}>
-										{'$ 0.00000'}
+										{'$ 0.00'}
 									</p>
 									<p className={'inline-flex items-baseline text-right text-xs tabular-nums text-neutral-400'}>
 										{'-'}
@@ -191,7 +191,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 					<div
 						aria-label={'pending rewards'}
 						className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0'}>
-						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Pending Rewards per 10000veCRV'}</label>
+						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Pending Rewards per 1000veCRV'}</label>
 						{
 							!nextRewardsForCurrentGaugeMap || nextRewardsForCurrentGaugeMap.length === 0 ? (
 								<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
