@@ -10,6 +10,8 @@ import {claimReward} from 'utils/actions/claimReward';
 
 import type {TCurveGauges, TKeyStringBN} from 'types/curves.d';
 
+const	valueModifier = 10000;
+
 function	GaugeRowItemWithExtraData({
 	address,
 	value,
@@ -23,7 +25,7 @@ function	GaugeRowItemWithExtraData({
 	const	decimals = tokenInfo?.decimals || 18;
 	const	symbol = tokenInfo?.symbol || '???';
 	const	bribeAmount = format.toNormalizedValue(format.BN(value), decimals);
-	const	bribeValue = bribeAmount * (Number(tokenPrice || 0) / 100);
+	const	bribeValue = bribeAmount * (Number(tokenPrice || 0) / (100 * valueModifier));
 
 	return (
 		<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
@@ -167,7 +169,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 					<div
 						aria-label={'current rewards'}
 						className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0'}>
-						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Current Rewards per 1000veCRV'}</label>
+						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Current Rewards per 10k veCRV'}</label>
 						{
 							!currentRewardsForCurrentGaugeMap || currentRewardsForCurrentGaugeMap.length === 0 ? (
 								<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
@@ -184,14 +186,14 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 									minDecimals={2}
 									key={`current-rewards-${currentGauge.gauge}-${key}`}
 									address={toAddress(key)}
-									value={category === 'v2' ? value.div(126144000) : value.mul(10000)} />
+									value={category === 'v2' ? value.div(126144000) : value.mul(valueModifier)} />
 							))
 						}
 					</div>
 					<div
 						aria-label={'pending rewards'}
 						className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0'}>
-						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Pending Rewards per 1000veCRV'}</label>
+						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Pending Rewards per 10k veCRV'}</label>
 						{
 							!nextRewardsForCurrentGaugeMap || nextRewardsForCurrentGaugeMap.length === 0 ? (
 								<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
@@ -208,7 +210,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 									minDecimals={2}
 									key={`pending-rewards-${currentGauge.gauge}-${key}`}
 									address={toAddress(key)}
-									value={category === 'v2' ? value.div(126144000) : value.mul(10000)} />
+									value={category === 'v2' ? value.div(126144000) : value.mul(valueModifier)} />
 							))
 						}
 					</div>
