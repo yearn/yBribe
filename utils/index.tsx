@@ -1,6 +1,14 @@
 import {ethers} from 'ethers';
 import {format, toAddress} from '@yearn-finance/web-lib/utils';
+import dayjs, {extend} from 'dayjs';
+import dayjsDuration from 'dayjs/plugin/duration.js';
+import utc from 'dayjs/plugin/utc';
+import weekday from 'dayjs/plugin/weekday';
 import {TNormalizedBN} from 'types/types.d';
+
+extend(dayjsDuration);
+extend(weekday);
+extend(utc);
 
 export function allowanceKey(token: unknown, spender: unknown): string {
 	return `${toAddress(token as string)}_${toAddress(spender as string)}`;
@@ -31,17 +39,25 @@ export function	getCounterValue(amount: number | string, price: number): string 
 }
 
 export function	getLastThursday(): number {
-	// Retrieve the timestamp of the last Thursday at 00:00:00 UTC.
-	// If today is Thursday, return the timestamp of today at 00:00:00 UTC.
-	const	oneDay = 86400;
-	const	today = new Date();
-	const	day = today.getDay();
-	const	utc = today.getTime() - (today.getTimezoneOffset() * 60000);
-	const	lastThursday = new Date(utc + (oneDay * (day === 4 ? 0 : 4 - day)));
-	lastThursday.setUTCHours(0, 0, 0, 0);
-	return Math.floor(lastThursday.getTime() / 1000);
+	const	today = dayjs().utc();
+	let		lastThursday = today.weekday(4);
+	lastThursday = lastThursday.set('hour', 0);
+	lastThursday = lastThursday.set('minute', 0);
+	lastThursday = lastThursday.set('second', 0);
+	if (today.isBefore(lastThursday)) {
+		return (lastThursday.subtract(1, 'week').unix());
+	}
+	return (lastThursday.unix());
 }
 
 export function	getNextThursday(): number {
-	return getLastThursday() + (86400 * 7);
+	const	today = dayjs().utc();
+	let		nextThursday = today.weekday(4);
+	nextThursday = nextThursday.set('hour', 0);
+	nextThursday = nextThursday.set('minute', 0);
+	nextThursday = nextThursday.set('second', 0);
+	if (today.isAfter(nextThursday)) {
+		return (nextThursday.add(1, 'week').unix());
+	}
+	return (nextThursday.unix());
 }
