@@ -42,7 +42,7 @@ const	defaultProps: TBribesContext = {
 const	BribesContext = createContext<TBribesContext>(defaultProps);
 export const BribesContextApp = ({children}: {children: React.ReactElement}): React.ReactElement => {
 	const	{gauges} = useCurve();
-	const	{provider, address, chainID, safeChainID} = useWeb3();
+	const	{provider, address, safeChainID} = useWeb3();
 	const	[currentRewards, set_currentRewards] = useState<TCurveGaugeVersionRewards>({v2: {}, v3: {}});
 	const	[nextRewards, set_nextRewards] = useState<TCurveGaugeVersionRewards>({v2: {}, v3: {}});
 	const	[claimable, set_claimable] = useState<TCurveGaugeVersionRewards>({v2: {}, v3: {}});
