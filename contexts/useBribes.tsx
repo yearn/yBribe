@@ -42,7 +42,7 @@ const	defaultProps: TBribesContext = {
 const	BribesContext = createContext<TBribesContext>(defaultProps);
 export const BribesContextApp = ({children}: {children: React.ReactElement}): React.ReactElement => {
 	const	{gauges} = useCurve();
-	const	{provider, address, chainID} = useWeb3();
+	const	{provider, address, chainID, safeChainID} = useWeb3();
 	const	[currentRewards, set_currentRewards] = useState<TCurveGaugeVersionRewards>({v2: {}, v3: {}});
 	const	[nextRewards, set_nextRewards] = useState<TCurveGaugeVersionRewards>({v2: {}, v3: {}});
 	const	[claimable, set_claimable] = useState<TCurveGaugeVersionRewards>({v2: {}, v3: {}});
@@ -55,7 +55,6 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	** 	Bribe contracts, not related to the user.
 	***************************************************************************/
 	const	getSharedStuffFromBribes = useCallback(async (): Promise<void> => {
-		const	safeChainID = chainID === 1337 ? 1 : chainID;
 		const	currentProvider = safeChainID === 1 ? provider || providers.getProvider(1) : providers.getProvider(1);
 		const	ethcallProvider = await providers.newEthCallProvider(currentProvider);
 		const	curveBribeV3Contract = new Contract(process.env.CURVE_BRIBE_V3_ADDRESS as string, CURVE_BRIBE_V3);
@@ -65,7 +64,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 			set_currentPeriod(Number(_currentPeriod));
 			set_nextPeriod(Number(_currentPeriod) + (86400 * 7));
 		});
-	}, [provider, chainID]);
+	}, [provider, safeChainID]);
 	useEffect((): void => {
 		getSharedStuffFromBribes();
 	}, [getSharedStuffFromBribes]);
@@ -233,7 +232,6 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	**	getBribes will start the process to retrieve the bribe information.
 	***************************************************************************/
 	const	getBribes = useCallback(async (): Promise<void> => {
-		const	safeChainID = chainID === 1337 ? 1 : chainID;
 		const	currentProvider = safeChainID === 1 ? provider || providers.getProvider(1) : providers.getProvider(1);
 		const	curveBribeV2Contract = new Contract(process.env.CURVE_BRIBE_V2_ADDRESS as string, CURVE_BRIBE_V2);
 		const	curveBribeV3Contract = new Contract(process.env.CURVE_BRIBE_V3_ADDRESS as string, CURVE_BRIBE_V3);
@@ -256,7 +254,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 			assignBribes('v3', rewardsListV3, multicallResultV3);
 			assignNextRewards('v3', nextRewardsListV3, nextMulticallResultV3);
 		});
-	}, [chainID, provider, getRewardsPerGauges, getRewardsPerUser, getNextPeriodRewards, assignBribes, assignNextRewards]);
+	}, [safeChainID, provider, getRewardsPerGauges, getRewardsPerUser, getNextPeriodRewards, assignBribes, assignNextRewards]);
 	useEffect((): void => {
 		getBribes();
 	}, [getBribes]);

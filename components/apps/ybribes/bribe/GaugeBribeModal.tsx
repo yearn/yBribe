@@ -16,7 +16,7 @@ import type {TNormalizedBN} from 'types/types.d';
 
 
 function	GaugeBribeModal({currentGauge, onClose}: {currentGauge: TCurveGauges, onClose: VoidFunction}): ReactElement {
-	const	{chainID, address, provider, isActive, openLoginModal, onSwitchChain} = useWeb3();
+	const	{chainID, address, provider, isActive, openLoginModal, onSwitchChain, safeChainID} = useWeb3();
 	const	{refresh} = useBribes();
 	const	{prices} = useYearn();
 	const	[amount, set_amount] = useState<TNormalizedBN>({raw: ethers.constants.Zero, normalized: 0});
@@ -34,7 +34,6 @@ function	GaugeBribeModal({currentGauge, onClose}: {currentGauge: TCurveGauges, o
 		raw: BigNumber,
 		allowance: BigNumber,
 	}> => {
-		const	safeChainID = chainID === 1337 ? 1 : chainID;
 		const	currentProvider = safeChainID === 1 ? provider || providers.getProvider(1) : providers.getProvider(1);
 		const	ethcallProvider = await providers.newEthCallProvider(currentProvider);
 		const	erc20Contract = new Contract(_tokenAddress, ABI.ERC20_ABI);
