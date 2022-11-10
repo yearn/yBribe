@@ -1,17 +1,34 @@
-import React, {ChangeEvent, ReactElement, ReactNode, useMemo, useState} from 'react';
+import React, {ChangeEvent, ReactElement, ReactNode, useCallback, useMemo, useState} from 'react';
 import Link from 'next/link';
+import {BigNumber} from 'ethers';
 import {Button} from '@yearn-finance/web-lib/components';
+import {format, performBatchedUpdates, toAddress} from '@yearn-finance/web-lib/utils';
 import {GaugeTableEmpty} from 'components/apps/ybribes/bribe/GaugeTableEmpty';
 import {GaugeTableHead} from 'components/apps/ybribes/bribe/GaugeTableHead';
 import {GaugeTableRow} from 'components/apps/ybribes/bribe/GaugeTableRow';
 import Wrapper from 'components/apps/ybribes/Wrapper';
+import {useBribes} from 'contexts/useBribes';
 import {useCurve} from 'contexts/useCurve';
+import {useYearn} from 'contexts/useYearn';
 import {TCurveGauges} from 'types/curves.d';
 
 function	GaugeList(): ReactElement {
+	const	{tokens, prices} = useYearn();
 	const	{gauges} = useCurve();
+	const	{currentRewards, nextRewards} = useBribes();
 	const	[category, set_category] = useState('all');
 	const	[searchValue, set_searchValue] = useState('');
+	const	[sortBy, set_sortBy] = useState('');
+	const	[sortDirection, set_sortDirection] = useState('desc');
+
+	const	getRewardValue = useCallback((address: string, value: BigNumber): number => {
+		const	tokenInfo = tokens?.[address];
+		const	tokenPrice = prices?.[address];
+		const	decimals = tokenInfo?.decimals || 18;
+		const	bribeAmount = format.toNormalizedValue(format.BN(value), decimals);
+		const	bribeValue = bribeAmount * (Number(tokenPrice || 0) / 100);
+		return bribeValue;
+	}, [prices, tokens]);
 
 	const	filteredGauges = useMemo((): TCurveGauges[] => {
 		if (category === 'factory') {
@@ -32,6 +49,67 @@ function	GaugeList(): ReactElement {
 		});
 	}, [filteredGauges, searchValue]);
 	
+	const	sortedGauges = useMemo((): TCurveGauges[] => {
+		if (sortBy === 'rewards') {
+			return searchedGauges.sort((a, b): number => {
+				const allARewardsV3 = Object.entries(currentRewards?.v3?.[toAddress(a.gauge)] || {}).reduce((acc, [address, value]): number => {
+					const aBribeValue = getRewardValue(address, value || BigNumber.from(0));
+					return acc + aBribeValue;
+				}, 0);
+				const allARewardsV2 = Object.entries(currentRewards?.v2?.[toAddress(a.gauge)] || {}).reduce((acc, [address, value]): number => {
+					const aBribeValue = getRewardValue(address, (value || BigNumber.from(0)).div(126144000));
+					return acc + aBribeValue;
+				}, 0);
+				const	allARewards = allARewardsV3 + allARewardsV2;
+
+				const allBRewardsV3 = Object.entries(currentRewards?.v3?.[toAddress(b.gauge)] || {}).reduce((acc, [address, value]): number => {
+					const aBribeValue = getRewardValue(address, value || BigNumber.from(0));
+					return acc + aBribeValue;
+				}, 0);
+				const allBRewardsV2 = Object.entries(currentRewards?.v2?.[toAddress(b.gauge)] || {}).reduce((acc, [address, value]): number => {
+					const aBribeValue = getRewardValue(address, (value || BigNumber.from(0)).div(126144000));
+					return acc + aBribeValue;
+				}, 0);
+				const	allBRewards = allBRewardsV3 + allBRewardsV2;
+
+				if (sortDirection === 'desc') {
+					return allBRewards - allARewards;
+				}
+				return allARewards - allBRewards;
+			});
+		}
+		if (sortBy === 'pendingRewards') {
+			return searchedGauges.sort((a, b): number => {
+				const allARewardsV3 = Object.entries(nextRewards?.v3?.[toAddress(a.gauge)] || {}).reduce((acc, [address, value]): number => {
+					const aBribeValue = getRewardValue(address, value || BigNumber.from(0));
+					return acc + aBribeValue;
+				}, 0);
+				const allARewardsV2 = Object.entries(nextRewards?.v2?.[toAddress(a.gauge)] || {}).reduce((acc, [address, value]): number => {
+					const aBribeValue = getRewardValue(address, (value || BigNumber.from(0)).div(126144000));
+					return acc + aBribeValue;
+				}, 0);
+				const	allARewards = allARewardsV3 + allARewardsV2;
+
+				const allBRewardsV3 = Object.entries(nextRewards?.v3?.[toAddress(b.gauge)] || {}).reduce((acc, [address, value]): number => {
+					const aBribeValue = getRewardValue(address, value || BigNumber.from(0));
+					return acc + aBribeValue;
+				}, 0);
+				const allBRewardsV2 = Object.entries(nextRewards?.v2?.[toAddress(b.gauge)] || {}).reduce((acc, [address, value]): number => {
+					const aBribeValue = getRewardValue(address, (value || BigNumber.from(0)).div(126144000));
+					return acc + aBribeValue;
+				}, 0);
+				const	allBRewards = allBRewardsV3 + allBRewardsV2;
+
+				if (sortDirection === 'desc') {
+					return allBRewards - allARewards;
+				}
+				return allARewards - allBRewards;
+			});
+		}
+		return searchedGauges;
+	}, [sortBy, searchedGauges, sortDirection, currentRewards, nextRewards, getRewardValue]);
+	
+
 	return (
 		<section className={'mt-4 mb-20 grid w-full grid-cols-12 pb-10 md:mb-40 md:mt-20'}>
 			<div className={'col-span-12 flex w-full flex-col bg-neutral-100'}>
@@ -89,10 +167,18 @@ function	GaugeList(): ReactElement {
 					</div>
 				</div>
 				<div className={'grid w-full grid-cols-1 pb-2 md:pb-4'}>
-					<GaugeTableHead />
-					{searchedGauges.length === 0 ? (
+					<GaugeTableHead
+						sortBy={sortBy}
+						sortDirection={sortDirection}
+						onSort={(_sortBy: string, _sortDirection: string): void => {
+							performBatchedUpdates((): void => {
+								set_sortBy(_sortBy);
+								set_sortDirection(_sortDirection);
+							});
+						}} />
+					{sortedGauges.length === 0 ? (
 						<GaugeTableEmpty />
-					) : searchedGauges.map((gauge): ReactNode => {
+					) : sortedGauges.map((gauge): ReactNode => {
 						if (!gauge) {
 							return (null);
 						}
