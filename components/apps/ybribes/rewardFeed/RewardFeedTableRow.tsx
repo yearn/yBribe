@@ -1,6 +1,6 @@
 import React, {ReactElement, useMemo} from 'react';
 import {BigNumber} from 'ethers';
-import {format, toAddress} from '@yearn-finance/web-lib/utils';
+import {format, toAddress, truncateHex} from '@yearn-finance/web-lib/utils';
 import {ImageWithFallback} from 'components/common/ImageWithFallback';
 import {useCurve} from 'contexts/useCurve';
 import {useYearn} from 'contexts/useYearn';
@@ -50,8 +50,8 @@ function	RewardFeedTableRow({currentRewardAdded}: {currentRewardAdded: TGaugeRew
 	return (
 		<div className={'grid w-full grid-cols-2 border-t border-neutral-200 px-4 md:grid-cols-3 md:px-10'}>
 			
-			<div className={'col-span-1 flex h-20 w-full items-center'}>
-				<div className={'flex flex-row items-center space-x-4'}>
+			<div className={'col-span-1 flex h-20 w-full space-x-4'}>
+				<div className={'flex flex-row items-start pt-6'}>
 					<div className={'flex h-6 w-6 rounded-full md:flex md:h-10 md:w-10'}>
 						<ImageWithFallback
 							alt={''}
@@ -61,13 +61,24 @@ function	RewardFeedTableRow({currentRewardAdded}: {currentRewardAdded: TGaugeRew
 							src={`${process.env.BASE_YEARN_ASSETS_URI}/1/${toAddress(gaugeItem?.swap_token)}/logo-128.png`}
 							loading={'eager'} />
 					</div>
-					<p>{gaugeItem.name}</p>
+				</div>
+				<div className={'flex h-auto flex-col items-start pt-6'}>
+					<div className={'inline-flex items-baseline text-base tabular-nums text-neutral-900'}>
+						{gaugeItem.name}
+					</div>
+					<a
+						href={`https://etherscan.io/address/${gaugeItem.gauge}`}
+						target={'_blank'}
+						rel={'noreferrer'}
+						className={'inline-flex cursor-alias items-baseline text-right text-xs tabular-nums text-neutral-400 transition-colors hover:text-neutral-900'}>
+						{truncateHex(gaugeItem.gauge, 6)}
+					</a>
 				</div>
 			</div>
 
 			<div className={'col-span-1 flex h-20 w-full justify-end'}>
 				<div className={'flex flex-row pt-6'}>
-					<p className={'items-baseline text-end text-sm tabular-nums text-neutral-400'}>
+					<p className={'items-baseline text-end text-sm tabular-nums leading-6 text-neutral-400'}>
 						{format.date(Number(currentRewardAdded.timestamp) * 1000)}
 					</p>
 				</div>
