@@ -10,22 +10,20 @@ import {claimReward} from 'utils/actions/claimReward';
 
 import type {TCurveGauges, TKeyStringBN} from 'types/curves.d';
 
-const	valueModifier = 10000;
-
 function	GaugeRowItemWithExtraData({
 	address,
 	value,
-	minDecimals = 2,
+	minDecimals = 5,
 	isV2
 }: {address: string, value: BigNumber, minDecimals?: number, isV2?: boolean}): ReactElement {
 	const	{tokens, prices} = useYearn();
 
 	const	tokenInfo = tokens?.[address];
-	const	tokenPrice = prices?.[address];
+	const	tokenPrice = Number(prices?.[address]) / 1000000;
 	const	decimals = tokenInfo?.decimals || 18;
 	const	symbol = tokenInfo?.symbol || '???';
 	const	bribeAmount = format.toNormalizedValue(format.BN(value), decimals);
-	const	bribeValue = bribeAmount * (Number(tokenPrice || 0) / (100 * valueModifier));
+	const	bribeValue = bribeAmount * (Number(tokenPrice || 0));
 
 	return (
 		<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
@@ -169,12 +167,12 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 					<div
 						aria-label={'current rewards'}
 						className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0'}>
-						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Current Rewards per 10k veCRV'}</label>
+						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Current Rewards per veCRV'}</label>
 						{
 							!currentRewardsForCurrentGaugeMap || currentRewardsForCurrentGaugeMap.length === 0 ? (
 								<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
 									<p className={'inline-flex items-baseline text-base tabular-nums text-neutral-900'}>
-										{'$ 0.00'}
+										{'$ 0.00000'}
 									</p>
 									<p className={'inline-flex items-baseline text-right text-xs tabular-nums text-neutral-400'}>
 										{'-'}
@@ -183,22 +181,21 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 							) : currentRewardsForCurrentGaugeMap.map(([key, value]: [string, BigNumber]): ReactElement => (
 								<GaugeRowItemWithExtraData
 									isV2={category === 'v2'}
-									minDecimals={2}
 									key={`current-rewards-${currentGauge.gauge}-${key}`}
 									address={toAddress(key)}
-									value={category === 'v2' ? value.div(126144000) : value.mul(valueModifier)} />
+									value={category === 'v2' ? value.div(126144000) : value} />
 							))
 						}
 					</div>
 					<div
 						aria-label={'pending rewards'}
 						className={'col-span-8 flex flex-row justify-between pt-4 md:col-span-3 md:flex-col md:justify-start md:pt-0'}>
-						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Pending Rewards per 10k veCRV'}</label>
+						<label className={'block text-sm leading-6 text-neutral-400 md:hidden'}>{'Pending Rewards per veCRV'}</label>
 						{
 							!nextRewardsForCurrentGaugeMap || nextRewardsForCurrentGaugeMap.length === 0 ? (
 								<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
 									<p className={'inline-flex items-baseline text-base tabular-nums text-neutral-900'}>
-										{'$ 0.00'}
+										{'$ 0.00000'}
 									</p>
 									<p className={'inline-flex items-baseline text-right text-xs tabular-nums text-neutral-400'}>
 										{'-'}
@@ -207,10 +204,9 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 							) : nextRewardsForCurrentGaugeMap.map(([key, value]: [string, BigNumber]): ReactElement => (
 								<GaugeRowItemWithExtraData
 									isV2={category === 'v2'}
-									minDecimals={2}
 									key={`pending-rewards-${currentGauge.gauge}-${key}`}
 									address={toAddress(key)}
-									value={category === 'v2' ? value.div(126144000) : value.mul(valueModifier)} />
+									value={category === 'v2' ? value.div(126144000) : value} />
 							))
 						}
 					</div>
@@ -265,7 +261,7 @@ function	GaugeTableRow({currentGauge, category}: {currentGauge: TCurveGauges, ca
 							!claimableForCurrentGaugeMap || claimableForCurrentGaugeMap.length === 0 ? (
 								<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
 									<p className={'inline-flex items-baseline text-base tabular-nums text-neutral-900'}>
-										{'$ 0.00'}
+										{'$ 0.00000'}
 									</p>
 									<p className={'inline-flex items-baseline text-right text-xs tabular-nums text-neutral-400'}>
 										{'-'}

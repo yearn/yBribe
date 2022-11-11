@@ -1,9 +1,12 @@
 import React, {createContext, useCallback, useContext, useEffect, useState} from 'react';
 import {Contract} from 'ethcall';
 import {BigNumber, ethers} from 'ethers';
+import axios from 'axios';
+import useSWR from 'swr';
 import {useWeb3} from '@yearn-finance/web-lib/contexts';
 import {performBatchedUpdates, providers, toAddress} from '@yearn-finance/web-lib/utils';
 import {useCurve} from 'contexts/useCurve';
+import {TGaugeRewardsFeed} from 'types/gaugesRewards.d';
 import {allowanceKey, getLastThursday, getNextThursday} from 'utils';
 import CURVE_BRIBE_V2 from 'utils/abi/curveBribeV2.abi';
 import CURVE_BRIBE_V3 from 'utils/abi/curveBribeV3.abi';
@@ -15,6 +18,7 @@ export type	TBribesContext = {
 	currentRewards: TCurveGaugeVersionRewards,
 	nextRewards: TCurveGaugeVersionRewards,
 	claimable: TCurveGaugeVersionRewards,
+	feed: TGaugeRewardsFeed[],
 	currentPeriod: number,
 	nextPeriod: number,
 	isLoading: boolean,
@@ -33,11 +37,15 @@ const	defaultProps: TBribesContext = {
 		v2: {},
 		v3: {}
 	},
+	feed: [],
 	currentPeriod: 0,
 	nextPeriod: 0,
 	isLoading: true,
 	refresh: async (): Promise<void> => undefined
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const baseFetcher = async (url: string): Promise<any> => axios.get(url).then((res): any => res.data);
 
 const	BribesContext = createContext<TBribesContext>(defaultProps);
 export const BribesContextApp = ({children}: {children: React.ReactElement}): React.ReactElement => {
@@ -49,6 +57,8 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	const	[isLoading, set_isLoading] = useState<boolean>(true);
 	const	[currentPeriod, set_currentPeriod] = useState<number>(getLastThursday());
 	const	[nextPeriod, set_nextPeriod] = useState<number>(getNextThursday());
+
+	const	{data: feed} = useSWR(`${process.env.YDAEMON_BASE_URI}/1/bribes/newRewardFeed`, baseFetcher);
 
 	/* 🔵 - Yearn Finance ******************************************************
 	**	getSharedStuffFromBribes will help you retrieved some elements from the
@@ -272,6 +282,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 				isLoading: isLoading,
 				currentPeriod,
 				nextPeriod,
+				feed: (feed || []) as TGaugeRewardsFeed[],
 				refresh: async (): Promise<void> => {
 					await getBribes();
 				}

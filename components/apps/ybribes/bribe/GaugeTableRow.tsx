@@ -18,15 +18,15 @@ function	GaugeRowItemWithExtraData({address, value}: {address: string, value: Bi
 	const	decimals = tokenInfo?.decimals || 18;
 	const	symbol = tokenInfo?.symbol || '???';
 	const	bribeAmount = format.toNormalizedValue(format.BN(value), decimals);
-	const	bribeValue = bribeAmount * (Number(tokenPrice || 0) / 1000000);
+	const	bribeValue = bribeAmount * (Number(tokenPrice || 0) / 100);
 
 	return (
 		<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
 			<p className={'inline-flex items-baseline text-base tabular-nums text-neutral-900'}>
-				{`$ ${format.amount(bribeValue, 2, 2)}`}
+				{`$ ${format.amount(bribeValue, 5, 5)}`}
 			</p>
 			<p className={'inline-flex items-baseline text-right text-xs tabular-nums text-neutral-400'}>
-				{format.amount(bribeAmount, 2, 2)}
+				{format.amount(bribeAmount, 5, 5)}
 				&nbsp;
 				<span>{`${symbol}`}</span>
 			</p>
@@ -96,7 +96,7 @@ function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactEleme
 						!currentRewardsForCurrentGaugeMap || currentRewardsForCurrentGaugeMap.length === 0 ? (
 							<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
 								<p className={'inline-flex items-baseline text-base tabular-nums text-neutral-900'}>
-									{'$ 0.00'}
+									{'$ 0.00000'}
 								</p>
 								<p className={'inline-flex items-baseline text-right text-xs tabular-nums text-neutral-400'}>
 									{'-'}
@@ -106,7 +106,7 @@ function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactEleme
 							<GaugeRowItemWithExtraData
 								key={`rewards-${currentGauge.gauge}-${key}`}
 								address={toAddress(key)}
-								value={value.mul(10000)} />
+								value={value} />
 						))
 					}
 				</div>
@@ -117,7 +117,7 @@ function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactEleme
 						!nextRewardsForCurrentGaugeMap || nextRewardsForCurrentGaugeMap.length === 0 ? (
 							<div className={'flex h-auto flex-col items-end pt-0 md:h-16 md:pt-6'}>
 								<p className={'inline-flex items-baseline text-base tabular-nums text-neutral-900'}>
-									{'$ 0.00'}
+									{'$ 0.00000'}
 								</p>
 								<p className={'inline-flex items-baseline text-right text-xs tabular-nums text-neutral-400'}>
 									{'-'}
@@ -127,7 +127,7 @@ function	GaugeTableRow({currentGauge}: {currentGauge: TCurveGauges}): ReactEleme
 							<GaugeRowItemWithExtraData
 								key={`rewards-${currentGauge.gauge}-${key}`}
 								address={toAddress(key)}
-								value={value.mul(10000)} />
+								value={value} />
 						))
 					}
 				</div>
