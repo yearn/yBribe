@@ -85,7 +85,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	**	per gauge.
 	***************************************************************************/
 	const getRewardsPerGauges = useCallback(async (
-		currentProvider: ethers.providers.Web3Provider,
+		currentProvider: ethers.providers.Provider,
 		contract: Contract
 	): Promise<string[][]> => {
 		const	ethcallProvider = await providers.newEthCallProvider(currentProvider);
@@ -104,7 +104,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	** 	list of gauges/tokens.
 	***************************************************************************/
 	const getRewardsPerUser = useCallback(async (
-		currentProvider: ethers.providers.Web3Provider,
+		currentProvider: ethers.providers.Provider,
 		contract: Contract,
 		rewardsPerGauges: string[][]
 	): Promise<{rewardsList: string[], multicallResult: any[]}> => {
@@ -145,7 +145,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	** 	able to calculate the next period rewards.
 	***************************************************************************/
 	const getNextPeriodRewards = useCallback(async (
-		currentProvider: ethers.providers.Web3Provider,
+		currentProvider: ethers.providers.Provider,
 		rewardsPerGauges: string[][]
 	): Promise<{rewardsList: string[], multicallResult: any[]}> => {
 		if ((rewardsPerGauges || []).length === 0) {
