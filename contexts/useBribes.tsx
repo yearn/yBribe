@@ -13,6 +13,7 @@ import CURVE_BRIBE_V3 from 'utils/abi/curveBribeV3.abi';
 import CURVE_BRIBE_V3_HELPER from 'utils/abi/curveBribeV3Helper.abi';
 
 import type {TCurveGaugeRewards, TCurveGaugeVersionRewards} from 'types/curves.d';
+import {useSettings} from '@yearn-finance/web-lib/contexts';
 
 export type	TBribesContext = {
 	currentRewards: TCurveGaugeVersionRewards,
@@ -57,8 +58,9 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	const	[isLoading, set_isLoading] = useState<boolean>(true);
 	const	[currentPeriod, set_currentPeriod] = useState<number>(getLastThursday());
 	const	[nextPeriod, set_nextPeriod] = useState<number>(getNextThursday());
+	const	{settings} = useSettings();
 
-	const	{data: feed} = useSWR(`${process.env.YDAEMON_BASE_URI}/1/bribes/newRewardFeed`, baseFetcher);
+	const	{data: feed} = useSWR(`${settings.yDaemonBaseURI}/1/bribes/newRewardFeed`, baseFetcher);
 
 	/* 🔵 - Yearn Finance ******************************************************
 	**	getSharedStuffFromBribes will help you retrieved some elements from the
