@@ -14,7 +14,7 @@ import {TCurveGauges} from 'types/curves.d';
 
 function	GaugeList(): ReactElement {
 	const	{tokens, prices} = useYearn();
-	const	{feed, currentRewards, nextRewards, claimable} = useBribes();
+	const	{currentRewards, nextRewards, claimable} = useBribes();
 	const	{gauges} = useCurve();
 	const	[category, set_category] = useState('all');
 	const	[searchValue, set_searchValue] = useState('');
@@ -124,8 +124,6 @@ function	GaugeList(): ReactElement {
 		return searchedGauges;
 	}, [sortBy, searchedGauges, sortDirection, currentRewards, nextRewards, getRewardValue]);
 	
-	console.log(feed);
-
 	return (
 		<section className={'mt-4 mb-20 grid w-full grid-cols-12 pb-10 md:mb-40 md:mt-20'}>
 			<div className={'col-span-12 flex w-full flex-col bg-neutral-100'}>
