@@ -1,12 +1,12 @@
-import React, {ReactElement, useMemo, useState} from 'react';
-import {GaugeTableEmpty} from 'components/apps/ybribes/bribe/GaugeTableEmpty';
+import React, {ReactElement, ReactNode, useMemo, useState} from 'react';
 import {Button} from '@yearn-finance/web-lib/components';
+import {useSettings} from '@yearn-finance/web-lib/contexts';
+import {GaugeTableEmpty} from 'components/apps/ybribes/bribe/GaugeTableEmpty';
 import {RewardFeedTableHead} from 'components/apps/ybribes/rewardFeed/RewardFeedTableHead';
 import {RewardFeedTableRow} from 'components/apps/ybribes/rewardFeed/RewardFeedTableRow';
 import Wrapper from 'components/apps/ybribes/Wrapper';
 import {useBribes} from 'contexts/useBribes';
 import {TGaugeRewardsFeed} from 'types/gaugesRewards.d';
-import {useSettings} from '@yearn-finance/web-lib/contexts';
 
 type TWrappedInput = {
 	title: string;
@@ -48,6 +48,7 @@ function	WrappedInput({title, initialValue, onSave}: TWrappedInput): ReactElemen
 function	About(): ReactElement {
 	const	{onUpdateBaseSettings, onUpdateNetworks, settings: baseAPISettings} = useSettings();
 	const	{feed} = useBribes();
+	const	[, set_nonce] = useState(0);
 
 	const	sortedFeed = useMemo((): TGaugeRewardsFeed[] => {
 		return feed.sort((a, b): number => {

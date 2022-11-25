@@ -24,9 +24,9 @@ export const YearnContextApp = ({children}: {children: React.ReactElement}): Rea
 	**	we need to fetch the data from the API, especially to get the
 	**	apy.net_apy
 	***************************************************************************/
-	const	{settings} = useSettings();
-	const	{data: prices} = useSWR(`${settings.yDaemonBaseURI}/1/prices/all`, baseFetcher);
-	const	{data: tokens} = useSWR(`${settings.yDaemonBaseURI}/1/tokens/all`, baseFetcher);
+	const	{settings:baseAPISettings} = useSettings();
+	const	{data: prices} = useSWR(`${baseAPISettings.yDaemonBaseURI}/1/prices/all`, baseFetcher);
+	const	{data: tokens} = useSWR(`${baseAPISettings.yDaemonBaseURI}/1/tokens/all`, baseFetcher);
 
 	/* 🔵 - Yearn Finance ******************************************************
 	**	Setup and render the Context provider to use in the app.
