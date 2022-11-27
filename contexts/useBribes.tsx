@@ -3,7 +3,7 @@ import {Contract} from 'ethcall';
 import {BigNumber, ethers} from 'ethers';
 import axios from 'axios';
 import useSWR from 'swr';
-import {useWeb3} from '@yearn-finance/web-lib/contexts';
+import {useSettings, useWeb3} from '@yearn-finance/web-lib/contexts';
 import {performBatchedUpdates, providers, toAddress} from '@yearn-finance/web-lib/utils';
 import {useCurve} from 'contexts/useCurve';
 import {TGaugeRewardsFeed} from 'types/gaugesRewards.d';
@@ -57,8 +57,9 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	const	[isLoading, set_isLoading] = useState<boolean>(true);
 	const	[currentPeriod, set_currentPeriod] = useState<number>(getLastThursday());
 	const	[nextPeriod, set_nextPeriod] = useState<number>(getNextThursday());
+	const	{settings:baseAPISettings} = useSettings();
 
-	const	{data: feed} = useSWR(`${process.env.YDAEMON_BASE_URI}/1/bribes/newRewardFeed`, baseFetcher);
+	const	{data: feed} = useSWR(`${baseAPISettings.yDaemonBaseURI}/1/bribes/newRewardFeed`, baseFetcher);
 
 	/* 🔵 - Yearn Finance ******************************************************
 	**	getSharedStuffFromBribes will help you retrieved some elements from the
