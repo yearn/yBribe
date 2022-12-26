@@ -1,6 +1,8 @@
 # yBribe
 ![](./public/og.png)
 
+## Please check [Yearn.fi](https://github.com/yearn/yearn.fi)
+
 Sell your vote to the highest bidder, or offer a bribe to increase CRV emissions to your favorite Curve pool.  
 Just like democracy, but you don't need to wear a suit.
 
