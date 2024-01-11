@@ -58,7 +58,6 @@ function About(): ReactElement {
 					</Balancer>
 				</div>
 			</div>
-
 			<div className={'mb-10 w-full bg-neutral-100 p-10'}>
 				<div
 					aria-label={'Why Bribe?'}
