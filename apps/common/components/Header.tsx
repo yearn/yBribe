@@ -98,9 +98,9 @@ function AppHeader(): ReactElement {
 	return (
 		<div
 			id={'head'}
-			className={'fixed inset-x-0 top-0 z-50 w-full bg-neutral-0/95'}>
-			<div className={'mx-auto max-w-6xl !px-0'}>
-				<header className={'yearn--header'}>
+			className={'inset-x-0 top-0 z-50 w-full bg-neutral-0'}>
+			<div className={'w-full'}>
+				<header className={'yearn--header mx-auto max-w-6xl !px-0'}>
 					<Navbar
 						currentPathName={pathname || ''}
 						nav={nav}

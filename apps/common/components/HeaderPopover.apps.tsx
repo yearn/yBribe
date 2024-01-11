@@ -43,7 +43,7 @@ export const APPS = {
 	},
 	yBribe: {
 		name: 'yBribe',
-		href: 'https://yearn.fi/ybribe',
+		href: '/',
 		icon: (
 			<LogoYearn
 				className={'h-8 w-8'}
@@ -69,7 +69,7 @@ export const APPS = {
 	},
 	yPrisma: {
 		name: 'yPrisma',
-		href: '/',
+		href: 'https://yprisma.yearn.fi',
 		icon: (
 			<ImageWithFallback
 				priority
