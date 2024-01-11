@@ -34,6 +34,10 @@
 	font-display: swap;
 }
 
+.max-w-6xl {
+	@apply max-w-[1264px] px-4;
+}
+
 #main {
 	@apply flex flex-col w-full h-full min-h-screen bg-neutral-0;
 }

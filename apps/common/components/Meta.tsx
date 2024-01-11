@@ -1,34 +1,11 @@
+import React from 'react';
 import Head from 'next/head';
-import Script from 'next/script';
 import {DefaultSeo} from 'next-seo';
+import meta from 'public/manifest.json';
 
 import type {ReactElement} from 'react';
 
-export type TMetaFile = {
-	name: string;
-	short_name: string;
-	description: string;
-	iconPath: string;
-	locale: string;
-	uri: string;
-	og: string;
-	twitter: string;
-	github: string;
-	icons: {
-		src: string;
-		sizes: string;
-		type: string;
-		purpose?: string;
-	}[];
-	theme_color: string;
-	background_color: string;
-	title_color: string;
-	start_url: string;
-	display: string;
-	orientation: string;
-};
-
-function Meta({meta}: {meta: TMetaFile}): ReactElement {
+function Meta(): ReactElement {
 	return (
 		<>
 			<Head>
@@ -54,10 +31,6 @@ function Meta({meta}: {meta: TMetaFile}): ReactElement {
 				<meta
 					name={'theme-color'}
 					content={meta.theme_color}
-				/>
-				<meta
-					name={'git-url'}
-					content={meta.github}
 				/>
 
 				<meta
@@ -102,7 +75,6 @@ function Meta({meta}: {meta: TMetaFile}): ReactElement {
 					href={'/favicons/safari-pinned-tab.svg'}
 					color={meta.theme_color}
 				/>
-
 				<link
 					rel={'shortcut icon'}
 					type={'image/x-icon'}
@@ -124,7 +96,7 @@ function Meta({meta}: {meta: TMetaFile}): ReactElement {
 					rel={'icon'}
 					type={'image/png'}
 					sizes={'512x512'}
-					href={'/favicons/android-icon-512x512.png'}
+					href={'/favicons/favicon-512x512.png'}
 				/>
 				<link
 					rel={'icon'}
@@ -157,21 +129,16 @@ function Meta({meta}: {meta: TMetaFile}): ReactElement {
 					sizes={'167x167'}
 					href={'/favicons/apple-icon-167x167.png'}
 				/>
+				<meta
+					name={'robots'}
+					content={'index,nofollow'}
+				/>
+				<meta
+					name={'googlebot'}
+					content={'index,nofollow'}
+				/>
+				<meta charSet={'utf-8'} />
 			</Head>
-			<Script
-				defer
-				data-domain={'yearn.fi'}
-				src={'/js/script.js'}
-			/>
-			<meta
-				name={'robots'}
-				content={'index,nofollow'}
-			/>
-			<meta
-				name={'googlebot'}
-				content={'index,nofollow'}
-			/>
-			<meta charSet={'utf-8'} />
 			<DefaultSeo
 				title={meta.name}
 				defaultTitle={meta.name}
