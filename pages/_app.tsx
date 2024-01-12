@@ -1,20 +1,21 @@
 import React, {memo} from 'react';
 import localFont from 'next/font/local';
 import {useRouter} from 'next/router';
-import {BribesContextApp} from 'apps/useBribes';
+import manifest from 'public/manifest.json';
 import {AnimatePresence, motion} from 'framer-motion';
 import {Analytics} from '@vercel/analytics/react';
 import {arbitrum, base, fantom, mainnet, optimism, polygon} from '@wagmi/chains';
+import Meta from '@yearn-finance/web-lib/components/Meta';
+import {WalletContextApp} from '@yearn-finance/web-lib/contexts/useWallet';
+import {YearnContextApp} from '@yearn-finance/web-lib/contexts/useYearn';
 import {WithYearn} from '@yearn-finance/web-lib/contexts/WithYearn';
 import {cl} from '@yearn-finance/web-lib/utils/cl';
+import {motionVariants} from '@yearn-finance/web-lib/utils/helpers';
 import {localhost} from '@yearn-finance/web-lib/utils/wagmi/networks';
-import AppHeader from '@common/components/Header';
-import {HeroTimer} from '@common/components/HeroTimer';
-import Meta from '@common/components/Meta';
-import {CurveContextApp} from '@common/contexts/useCurve';
-import {WalletContextApp} from '@common/contexts/useWallet';
-import {YearnContextApp} from '@common/contexts/useYearn';
-import {variants} from '@common/utils/animations';
+import AppHeader from '@yBribe/components/common/Header';
+import {HeroTimer} from '@yBribe/components/common/HeroTimer';
+import {BribesContextApp} from '@yBribe/contexts/useBribes';
+import {CurveContextApp} from '@yBribe/contexts/useCurve';
 import {getNextThursday} from '@yBribe/index';
 
 import type {AppProps} from 'next/app';
@@ -50,7 +51,7 @@ function AppWrapper(props: AppProps): ReactElement {
 
 	return (
 		<>
-			<Meta />
+			<Meta meta={manifest} />
 			<div
 				id={'app'}
 				className={cl('mx-auto mb-0 flex font-aeonik')}>
@@ -64,7 +65,7 @@ function AppWrapper(props: AppProps): ReactElement {
 								animate={'enter'}
 								exit={'exit'}
 								className={'my-0 h-full md:mb-0 md:mt-16'}
-								variants={variants}>
+								variants={motionVariants}>
 								<HeroTimer endTime={getNextThursday()} />
 								<Component
 									router={props.router}

@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {erc20ABI, useContractReads} from 'wagmi';
-import {useYearn} from '@common/contexts/useYearn';
+import {useYearn} from '@yearn-finance/web-lib/contexts/useYearn';
 
 import type {TAddress} from '@yearn-finance/web-lib/types';
 

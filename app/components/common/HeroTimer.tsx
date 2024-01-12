@@ -1,6 +1,6 @@
 import {extend} from 'dayjs';
 import dayjsDuration from 'dayjs/plugin/duration.js';
-import {useTimer} from '@common/hooks/useTimer';
+import {useTimer} from '@yBribe/hooks/useTimer';
 
 import type {ReactElement} from 'react';
 import type {TSeconds} from '@yearn-finance/web-lib/utils/time';

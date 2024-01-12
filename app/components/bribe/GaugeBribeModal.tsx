@@ -1,10 +1,8 @@
 import {useCallback, useMemo, useState} from 'react';
-import {addReward} from 'apps/actions';
-import {YBRIBE_SUPPORTED_NETWORK} from 'apps/index';
-import {useBribes} from 'apps/useBribes';
 import {erc20ABI, useContractReads} from 'wagmi';
 import {Button} from '@yearn-finance/web-lib/components/Button';
 import {useWeb3} from '@yearn-finance/web-lib/contexts/useWeb3';
+import {useYearn} from '@yearn-finance/web-lib/contexts/useYearn';
 import {isZeroAddress, toAddress} from '@yearn-finance/web-lib/utils/address';
 import {CURVE_BRIBE_V3_ADDRESS, ZERO_ADDRESS} from '@yearn-finance/web-lib/utils/constants';
 import {decodeAsBigInt, decodeAsNumber, decodeAsString} from '@yearn-finance/web-lib/utils/decoder';
@@ -12,9 +10,11 @@ import {formatToNormalizedValue, toBigInt, toNormalizedBN} from '@yearn-finance/
 import {formatCounterValue} from '@yearn-finance/web-lib/utils/format.value';
 import {handleInputChangeValue} from '@yearn-finance/web-lib/utils/handler';
 import {isZero} from '@yearn-finance/web-lib/utils/isZero';
+import {approveERC20} from '@yearn-finance/web-lib/utils/wagmi/actions';
 import {defaultTxStatus} from '@yearn-finance/web-lib/utils/web3/transaction';
-import {useYearn} from '@common/contexts/useYearn';
-import {approveERC20} from '@common/utils/actions';
+import {addReward} from '@yBribe/actions';
+import {useBribes} from '@yBribe/contexts/useBribes';
+import {YBRIBE_SUPPORTED_NETWORK} from '@yBribe/index';
 
 import type {ChangeEvent, ReactElement} from 'react';
 import type {TAddress, TNormalizedBN} from '@yearn-finance/web-lib/types';

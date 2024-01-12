@@ -3,8 +3,7 @@
 		"rootDirs": ["."],
 		"baseUrl": ".",
 		"paths": {
-			"@common/*": ["apps/common/*"],
-			"@yBribe/*": ["apps/*"]
+			"@yBribe/*": ["app/*"]
 		},
 		/* Basic Options */
 		"target": "esnext",

@@ -1,7 +1,6 @@
+import {ImageWithFallback} from '@yearn-finance/web-lib/components/ImageWithFallback';
 import {YCRV_TOKEN_ADDRESS} from '@yearn-finance/web-lib/utils/constants';
-import {LogoYearn} from '@common/icons/LogoYearn';
-
-import {ImageWithFallback} from './ImageWithFallback';
+import {LogoYearn} from '@yBribe/icons/LogoYearn';
 
 export const APPS = {
 	Vaults: {

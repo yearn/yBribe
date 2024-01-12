@@ -1,9 +1,9 @@
 import {cloneElement, Fragment, useState} from 'react';
 import Link from 'next/link';
 import {Popover, Transition} from '@headlessui/react';
-import {LogoYearn} from '@common/icons/LogoYearn';
+import {LogoYearn} from '@yBribe/icons/LogoYearn';
 
-import {APPS} from './HeaderPopover.apps';
+import {APPS} from '../../yApps';
 
 import type {ReactElement} from 'react';
 
@@ -37,7 +37,7 @@ function LogoPopover(): ReactElement {
 				<Popover.Panel
 					className={'absolute left-1/2 z-10 mt-0 w-80 -translate-x-1/2 px-4 pt-4 sm:px-0 md:w-96'}>
 					<div className={'overflow-hidden rounded-lg border border-neutral-200 shadow-lg'}>
-						<div className={'relative grid grid-cols-2 bg-neutral-0 md:grid-cols-3'}>
+						<div className={'bg-neutral-0 relative grid grid-cols-2 md:grid-cols-3'}>
 							{Object.values(APPS).map(({name, href, icon}): ReactElement => {
 								return (
 									<Link

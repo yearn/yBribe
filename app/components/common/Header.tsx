@@ -74,7 +74,7 @@ function WalletSelector(): ReactElement {
 						<IconWallet className={'yearn--header-nav-item mt-0.5 block h-4 w-4 md:hidden'} />
 						<span
 							className={
-								'relative hidden h-8 cursor-pointer items-center justify-center rounded border border-transparent bg-neutral-900 px-2 text-xs font-normal text-neutral-0 transition-all hover:bg-neutral-800 md:flex'
+								'text-neutral-0 relative hidden h-8 cursor-pointer items-center justify-center rounded border border-transparent bg-neutral-900 px-2 text-xs font-normal transition-all hover:bg-neutral-800 md:flex'
 							}>
 							{'Connect wallet'}
 						</span>
@@ -98,7 +98,7 @@ function AppHeader(): ReactElement {
 	return (
 		<div
 			id={'head'}
-			className={'inset-x-0 top-0 z-50 w-full bg-neutral-0'}>
+			className={'bg-neutral-0 inset-x-0 top-0 z-50 w-full'}>
 			<div className={'w-full'}>
 				<header className={'yearn--header mx-auto max-w-6xl !px-0'}>
 					<Navbar

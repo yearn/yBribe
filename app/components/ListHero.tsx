@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react';
 import {useIsMounted} from '@react-hookz/web';
 import {Button} from '@yearn-finance/web-lib/components/Button';
-import {SearchBar} from '@common/components/SearchBar';
-import {isValidCategory} from '@common/types/category';
+import {SearchBar} from '@yearn-finance/web-lib/components/SearchBar';
+import {isValidCategory} from '@yBribe/index';
 
 import type {ChangeEvent, ReactElement, ReactNode} from 'react';
 
@@ -112,7 +112,7 @@ export function ListHero<T extends string>({
 			<div className={'flex w-full flex-row space-x-2 md:hidden md:w-2/3'}>
 				<select
 					suppressHydrationWarning
-					className={'yearn--button-smaller !w-[120%] border-none bg-neutral-900 text-neutral-0'}
+					className={'yearn--button-smaller text-neutral-0 !w-[120%] border-none bg-neutral-900'}
 					onChange={({target: {value}}): void => {
 						if (isValidCategory<T>(value)) {
 							onSelect(value);
@@ -133,11 +133,11 @@ export function ListHero<T extends string>({
 								)
 						)}
 				</select>
-				<div className={'flex h-8 w-full items-center border border-neutral-0 bg-neutral-0 p-2 md:w-auto'}>
+				<div className={'border-neutral-0 bg-neutral-0 flex h-8 w-full items-center border p-2 md:w-auto'}>
 					<div className={'flex h-8 w-full flex-row items-center justify-between px-0 py-2'}>
 						<input
 							className={
-								'w-full overflow-x-scroll border-none bg-transparent px-0 py-2 text-xs outline-none scrollbar-none'
+								'scrollbar-none w-full overflow-x-scroll border-none bg-transparent px-0 py-2 text-xs outline-none'
 							}
 							type={'text'}
 							placeholder={'Search'}

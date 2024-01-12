@@ -1,19 +1,19 @@
 import {useCallback, useMemo, useState} from 'react';
-import {claimRewardV3} from 'apps/actions';
-import {YBRIBE_SUPPORTED_NETWORK} from 'apps/index';
-import {useBribes} from 'apps/useBribes';
 import {Button} from '@yearn-finance/web-lib/components/Button';
+import {ImageWithFallback} from '@yearn-finance/web-lib/components/ImageWithFallback';
 import {Renderable} from '@yearn-finance/web-lib/components/Renderable';
 import {useWeb3} from '@yearn-finance/web-lib/contexts/useWeb3';
+import {useYearn} from '@yearn-finance/web-lib/contexts/useYearn';
 import {toAddress} from '@yearn-finance/web-lib/utils/address';
 import {CRV_TOKEN_ADDRESS, CURVE_BRIBE_V3_ADDRESS} from '@yearn-finance/web-lib/utils/constants';
 import {formatToNormalizedValue, toBigInt} from '@yearn-finance/web-lib/utils/format.bigNumber';
 import {formatAmount, formatPercent, formatUSD} from '@yearn-finance/web-lib/utils/format.number';
 import {isZero} from '@yearn-finance/web-lib/utils/isZero';
 import {defaultTxStatus} from '@yearn-finance/web-lib/utils/web3/transaction';
-import {ImageWithFallback} from '@common/components/ImageWithFallback';
-import {useYearn} from '@common/contexts/useYearn';
-import {useTokenInfo} from '@common/hooks/useTokenInfo';
+import {claimRewardV3} from '@yBribe/actions';
+import {useBribes} from '@yBribe/contexts/useBribes';
+import {useTokenInfo} from '@yBribe/hooks/useTokenInfo';
+import {YBRIBE_SUPPORTED_NETWORK} from '@yBribe/index';
 
 import type {ReactElement} from 'react';
 import type {TAddress, TDict} from '@yearn-finance/web-lib/types';
