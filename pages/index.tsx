@@ -7,6 +7,7 @@ import {ListHero} from 'apps/components/ListHero';
 import {useBribes} from 'apps/useBribes';
 import {Button} from '@yearn-finance/web-lib/components/Button';
 import {Renderable} from '@yearn-finance/web-lib/components/Renderable';
+import {usePagination} from '@yearn-finance/web-lib/hooks/usePagination';
 import {useSessionStorage} from '@yearn-finance/web-lib/hooks/useSessionStorage';
 import {toAddress} from '@yearn-finance/web-lib/utils/address';
 import {formatToNormalizedValue, toBigInt} from '@yearn-finance/web-lib/utils/format.bigNumber';
@@ -14,13 +15,11 @@ import {isTAddress} from '@yearn-finance/web-lib/utils/isTAddress';
 import {Pagination} from '@common/components/Pagination';
 import {useCurve} from '@common/contexts/useCurve';
 import {useYearn} from '@common/contexts/useYearn';
-import {usePagination} from '@common/hooks/usePagination';
 import {stringSort} from '@common/utils/sort';
 
 import type {ReactElement, ReactNode} from 'react';
-import type {TAddress} from '@yearn-finance/web-lib/types';
-import type {TCurveGauge} from '@common/schemas/curveSchemas';
-import type {TSortDirection} from '@common/types/types';
+import type {TAddress, TSortDirection} from '@yearn-finance/web-lib/types';
+import type {TCurveGauge} from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
 
 function GaugeList(): ReactElement {
 	const {tokens, prices} = useYearn();

@@ -10,16 +10,15 @@ import {CURVE_BRIBE_V3_ADDRESS, ZERO_ADDRESS} from '@yearn-finance/web-lib/utils
 import {decodeAsBigInt, decodeAsNumber, decodeAsString} from '@yearn-finance/web-lib/utils/decoder';
 import {formatToNormalizedValue, toBigInt, toNormalizedBN} from '@yearn-finance/web-lib/utils/format.bigNumber';
 import {formatCounterValue} from '@yearn-finance/web-lib/utils/format.value';
-import {handleInputChangeEventValue} from '@yearn-finance/web-lib/utils/handlers/handleInputChangeEventValue';
+import {handleInputChangeValue} from '@yearn-finance/web-lib/utils/handler';
 import {isZero} from '@yearn-finance/web-lib/utils/isZero';
 import {defaultTxStatus} from '@yearn-finance/web-lib/utils/web3/transaction';
 import {useYearn} from '@common/contexts/useYearn';
 import {approveERC20} from '@common/utils/actions';
 
 import type {ChangeEvent, ReactElement} from 'react';
-import type {TAddress} from '@yearn-finance/web-lib/types';
-import type {TCurveGauge} from '@common/schemas/curveSchemas';
-import type {TNormalizedBN} from '@common/types/types';
+import type {TAddress, TNormalizedBN} from '@yearn-finance/web-lib/types';
+import type {TCurveGauge} from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
 
 type TExpectedOutFetcher = {
 	name: string;
@@ -156,7 +155,7 @@ export function GaugeBribeModal({
 	}
 
 	return (
-		<div className={'mx-auto block w-full bg-neutral-0 p-4 md:p-10'}>
+		<div className={'bg-neutral-0 mx-auto block w-full p-4 md:p-10'}>
 			<div className={'relative z-20 col-span-6 flex flex-col space-y-1'}>
 				<div>
 					<b className={'text-3xl text-neutral-900'}>{`Offer bribe to ${currentGauge.name}`}</b>
@@ -172,7 +171,7 @@ export function GaugeBribeModal({
 						<div className={'flex h-10 items-center bg-neutral-100 p-2'}>
 							<div className={'flex h-10 w-full flex-row items-center justify-between px-0 py-4'}>
 								<input
-									className={`w-full overflow-x-scroll border-none bg-transparent px-0 py-4 font-bold outline-none scrollbar-none ${
+									className={`scrollbar-none w-full overflow-x-scroll border-none bg-transparent px-0 py-4 font-bold outline-none ${
 										isActive ? '' : 'cursor-not-allowed'
 									}`}
 									type={'text'}
@@ -201,7 +200,7 @@ export function GaugeBribeModal({
 						<div className={'flex h-10 items-center bg-neutral-100 p-2'}>
 							<div className={'flex h-10 w-full flex-row items-center justify-between px-0 py-4'}>
 								<input
-									className={`w-full overflow-x-scroll border-none bg-transparent px-0 py-4 font-bold outline-none scrollbar-none ${
+									className={`scrollbar-none w-full overflow-x-scroll border-none bg-transparent px-0 py-4 font-bold outline-none ${
 										isActive ? '' : 'cursor-not-allowed'
 									}`}
 									type={'text'}
@@ -209,7 +208,7 @@ export function GaugeBribeModal({
 									value={amount.normalized}
 									onChange={(e: ChangeEvent<HTMLInputElement>): void => {
 										set_amount(
-											handleInputChangeEventValue(e.target.value, selectedToken?.decimals || 18)
+											handleInputChangeValue(e.target.value, selectedToken?.decimals || 18)
 										);
 									}}
 								/>
@@ -221,7 +220,7 @@ export function GaugeBribeModal({
 										});
 									}}
 									className={
-										'cursor-pointer bg-neutral-900 px-2 py-1 text-xs text-neutral-0 transition-colors hover:bg-neutral-700'
+										'text-neutral-0 cursor-pointer bg-neutral-900 px-2 py-1 text-xs transition-colors hover:bg-neutral-700'
 									}>
 									{'Max'}
 								</button>
@@ -229,7 +228,7 @@ export function GaugeBribeModal({
 						</div>
 					</div>
 
-					<div className={'space-y-1 border-t border-neutral-200 bg-neutral-0 py-6'}>
+					<div className={'bg-neutral-0 space-y-1 border-t border-neutral-200 py-6'}>
 						<div className={'flex flex-row items-center justify-between'}>
 							<p className={'text-sm text-neutral-400'}>{'Token'}</p>
 							<p className={'text-base tabular-nums text-neutral-900'}>

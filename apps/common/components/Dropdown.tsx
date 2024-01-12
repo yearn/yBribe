@@ -1,9 +1,8 @@
 import React, {Fragment, useState} from 'react';
 import {Combobox, Transition} from '@headlessui/react';
 import {useThrottledState} from '@react-hookz/web';
+import {IconChevron} from '@yearn-finance/web-lib/icons/IconChevron';
 import {cl} from '@yearn-finance/web-lib/utils/cl';
-import {performBatchedUpdates} from '@yearn-finance/web-lib/utils/performBatchedUpdates';
-import {IconChevron} from '@common/icons/IconChevron';
 
 import {ImageWithFallback} from './ImageWithFallback';
 
@@ -113,12 +112,10 @@ export const Dropdown = ({
 					<Combobox
 						value={selected}
 						onChange={(option: TDropdownOption): void => {
-							performBatchedUpdates((): void => {
-								if (onChange) {
-									onChange(option);
-								}
-								set_isOpen(false);
-							});
+							if (onChange) {
+								onChange(option);
+							}
+							set_isOpen(false);
 						}}
 						disabled={isDisabled}>
 						<>
@@ -152,10 +149,8 @@ export const Dropdown = ({
 											displayValue={(option?: TDropdownOption): string => option?.label ?? '-'}
 											spellCheck={false}
 											onChange={(event): void => {
-												performBatchedUpdates((): void => {
-													set_isOpen(true);
-													set_search(event.target.value);
-												});
+												set_isOpen(true);
+												set_search(event.target.value);
 											}}
 										/>
 									</p>

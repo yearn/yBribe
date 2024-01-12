@@ -1,5 +1,5 @@
 import ReactPaginate from 'react-paginate';
-import {IconPaginationArrow} from '@common/icons/IconPaginationArrow';
+import {IconPaginationArrow} from '@yearn-finance/web-lib/icons/IconPaginationArrow';
 
 import type {ReactElement} from 'react';
 

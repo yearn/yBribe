@@ -17,7 +17,7 @@ import {useTokenInfo} from '@common/hooks/useTokenInfo';
 
 import type {ReactElement} from 'react';
 import type {TAddress, TDict} from '@yearn-finance/web-lib/types';
-import type {TCurveGauge} from '@common/schemas/curveSchemas';
+import type {TCurveGauge} from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
 
 function GaugeRowItemWithExtraData({
 	address,

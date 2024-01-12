@@ -1,6 +1,7 @@
 import {createContext, memo, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {useDeepCompareMemo} from '@react-hookz/web';
 import {onLoadDone, onLoadStart} from '@yearn-finance/web-lib/contexts/useUI';
+import {type TUseBalancesTokens, useBalances} from '@yearn-finance/web-lib/hooks/useMultichainBalances';
 import {toAddress, zeroAddress} from '@yearn-finance/web-lib/utils/address';
 import {
 	BAL_TOKEN_ADDRESS,
@@ -20,12 +21,10 @@ import {
 } from '@yearn-finance/web-lib/utils/constants';
 import {toNormalizedBN} from '@yearn-finance/web-lib/utils/format.bigNumber';
 import {useYearn} from '@common/contexts/useYearn';
-import {type TUseBalancesTokens, useBalances} from '@common/hooks/useMultichainBalances';
 
 import type {ReactElement} from 'react';
-import type {TAddress, TDict} from '@yearn-finance/web-lib/types';
-import type {TYDaemonVault} from '@common/schemas/yDaemonVaultsSchemas';
-import type {TChainTokens, TNormalizedBN, TToken} from '@common/types/types';
+import type {TAddress, TChainTokens, TDict, TNormalizedBN, TToken} from '@yearn-finance/web-lib/types';
+import type {TYDaemonVault} from '@yearn-finance/web-lib/utils/schemas/yDaemonVaultsSchemas';
 
 export type TWalletContext = {
 	getToken: ({address, chainID}: TTokenAndChain) => TToken;

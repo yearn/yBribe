@@ -1,11 +1,20 @@
 import {createContext, useContext, useMemo} from 'react';
+import {useFetch} from '@yearn-finance/web-lib/hooks/useFetch';
 import {isZeroAddress} from '@yearn-finance/web-lib/utils/address';
-import {useFetch} from '@common/hooks/useFetch';
-import {coinGeckoPricesSchema} from '@common/schemas/coinGeckoSchemas';
-import {curveAllGaugesSchema, curveGaugesFromYearnSchema, curveWeeklyFeesSchema} from '@common/schemas/curveSchemas';
+import {coinGeckoPricesSchema} from '@yearn-finance/web-lib/utils/schemas/coinGeckoSchemas';
+import {
+	curveAllGaugesSchema,
+	curveGaugesFromYearnSchema,
+	curveWeeklyFeesSchema
+} from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
 
-import type {TCoinGeckoPrices} from '@common/schemas/coinGeckoSchemas';
-import type {TCurveAllGauges, TCurveGauge, TCurveGaugesFromYearn, TCurveWeeklyFees} from '@common/schemas/curveSchemas';
+import type {TCoinGeckoPrices} from '@yearn-finance/web-lib/utils/schemas/coinGeckoSchemas';
+import type {
+	TCurveAllGauges,
+	TCurveGauge,
+	TCurveGaugesFromYearn,
+	TCurveWeeklyFees
+} from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
 
 export type TCurveContext = {
 	curveWeeklyFees: TCurveWeeklyFees['data'];

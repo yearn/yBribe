@@ -1,18 +1,17 @@
 import {createContext, useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import {CURVE_BRIBE_V3_ABI} from 'apps/abi/curveBribeV3.abi';
-import {CURVE_BRIBE_V3_HELPER_ABI} from 'apps/abi/curveBribeV3Helper.abi';
-import {YBRIBE_SUPPORTED_NETWORK} from 'apps/index';
+import {getLastThursday, getNextThursday, YBRIBE_SUPPORTED_NETWORK} from 'apps/index';
 import {useAccount, useContractRead} from 'wagmi';
 import {multicall, prepareWriteContract} from '@wagmi/core';
 import {useWeb3} from '@yearn-finance/web-lib/contexts/useWeb3';
+import {useAsyncTrigger} from '@yearn-finance/web-lib/hooks/useAsyncTrigger';
+import {CURVE_BRIBE_V3_ABI} from '@yearn-finance/web-lib/utils/abi/curveBribeV3.abi';
+import {CURVE_BRIBE_V3_HELPER_ABI} from '@yearn-finance/web-lib/utils/abi/curveBribeV3Helper.abi';
 import {allowanceKey, toAddress} from '@yearn-finance/web-lib/utils/address';
 import {CURVE_BRIBE_V3_ADDRESS, CURVE_BRIBE_V3_HELPER_ADDRESS} from '@yearn-finance/web-lib/utils/constants';
 import {decodeAsBigInt} from '@yearn-finance/web-lib/utils/decoder';
 import {toBigInt} from '@yearn-finance/web-lib/utils/format.bigNumber';
 import {isZero} from '@yearn-finance/web-lib/utils/isZero';
 import {useCurve} from '@common/contexts/useCurve';
-import {useAsyncTrigger} from '@common/hooks/useAsyncEffect';
-import {getLastThursday, getNextThursday} from '@yBribe/index';
 
 import type {TAddress, TDict, VoidPromiseFunction} from '@yearn-finance/web-lib/types';
 import type {TCurveGaugeVersionRewards} from '@common/types/curves';

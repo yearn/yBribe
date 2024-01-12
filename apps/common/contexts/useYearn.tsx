@@ -2,24 +2,24 @@ import {createContext, memo, useContext} from 'react';
 import {deserialize, serialize} from 'wagmi';
 import {useDeepCompareMemo, useLocalStorageValue} from '@react-hookz/web';
 import {useWeb3} from '@yearn-finance/web-lib/contexts/useWeb3';
+import {useFetch} from '@yearn-finance/web-lib/hooks/useFetch';
 import {toAddress} from '@yearn-finance/web-lib/utils/address';
-import {useFetch} from '@common/hooks/useFetch';
-import {yDaemonEarnedSchema} from '@common/schemas/yDaemonEarnedSchema';
-import {yDaemonPricesChainSchema} from '@common/schemas/yDaemonPricesSchema';
-import {Solver} from '@common/schemas/yDaemonTokenListBalances';
-import {yDaemonTokensChainSchema} from '@common/schemas/yDaemonTokensSchema';
-import {yDaemonVaultsSchema} from '@common/schemas/yDaemonVaultsSchemas';
+import {yDaemonEarnedSchema} from '@yearn-finance/web-lib/utils/schemas/yDaemonEarnedSchema';
+import {yDaemonPricesChainSchema} from '@yearn-finance/web-lib/utils/schemas/yDaemonPricesSchema';
+import {Solver} from '@yearn-finance/web-lib/utils/schemas/yDaemonTokenListBalances';
+import {yDaemonTokensChainSchema} from '@yearn-finance/web-lib/utils/schemas/yDaemonTokensSchema';
+import {yDaemonVaultsSchema} from '@yearn-finance/web-lib/utils/schemas/yDaemonVaultsSchemas';
 import {useYDaemonBaseURI} from '@common/utils/getYDaemonBaseURI';
 import {DEFAULT_MAX_LOSS, DEFAULT_SLIPPAGE} from '@yBribe/index';
 
 import type {ReactElement} from 'react';
 import type {KeyedMutator} from 'swr';
 import type {TAddress, TDict} from '@yearn-finance/web-lib/types';
-import type {TYDaemonEarned} from '@common/schemas/yDaemonEarnedSchema';
-import type {TYDaemonPricesChain} from '@common/schemas/yDaemonPricesSchema';
-import type {TSolver} from '@common/schemas/yDaemonTokenListBalances';
-import type {TYDaemonTokens, TYDaemonTokensChain} from '@common/schemas/yDaemonTokensSchema';
-import type {TYDaemonVault, TYDaemonVaults} from '@common/schemas/yDaemonVaultsSchemas';
+import type {TYDaemonEarned} from '@yearn-finance/web-lib/utils/schemas/yDaemonEarnedSchema';
+import type {TYDaemonPricesChain} from '@yearn-finance/web-lib/utils/schemas/yDaemonPricesSchema';
+import type {TSolver} from '@yearn-finance/web-lib/utils/schemas/yDaemonTokenListBalances';
+import type {TYDaemonTokens, TYDaemonTokensChain} from '@yearn-finance/web-lib/utils/schemas/yDaemonTokensSchema';
+import type {TYDaemonVault, TYDaemonVaults} from '@yearn-finance/web-lib/utils/schemas/yDaemonVaultsSchemas';
 
 export type TYearnContext = {
 	currentPartner: TAddress;
@@ -137,11 +137,10 @@ function useYearnEarned(): TYDaemonEarned {
 
 export const YearnContextApp = memo(function YearnContextApp({children}: {children: ReactElement}): ReactElement {
 	const {yDaemonBaseUri: yDaemonBaseUriWithoutChain} = useYDaemonBaseURI();
-	const {currentPartner} = useWeb3();
 	const {value: maxLoss, set: set_maxLoss} = useLocalStorageValue<bigint>('yearn.fi/max-loss', {
 		defaultValue: DEFAULT_MAX_LOSS,
-		parse: (str, fallback): bigint => (str ? deserialize(str) : fallback),
-		stringify: (data): string => serialize(data)
+		parse: (str: string, fallback: bigint): bigint => (str ? deserialize(str) : fallback),
+		stringify: (data: bigint): string => serialize(data)
 	});
 	const {value: zapSlippage, set: set_zapSlippage} = useLocalStorageValue<number>('yearn.fi/zap-slippage', {
 		defaultValue: DEFAULT_SLIPPAGE
@@ -229,9 +228,7 @@ export const YearnContextApp = memo(function YearnContextApp({children}: {childr
 	 ***************************************************************************/
 	const contextValue = useDeepCompareMemo(
 		(): TYearnContext => ({
-			currentPartner: currentPartner?.id
-				? toAddress(currentPartner.id)
-				: toAddress(process.env.PARTNER_ID_ADDRESS),
+			currentPartner: toAddress(process.env.PARTNER_ID_ADDRESS),
 			prices,
 			tokens,
 			earned,
@@ -250,7 +247,6 @@ export const YearnContextApp = memo(function YearnContextApp({children}: {childr
 			mutateVaultList
 		}),
 		[
-			currentPartner,
 			prices,
 			tokens,
 			earned,
