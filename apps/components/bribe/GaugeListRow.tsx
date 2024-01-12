@@ -1,4 +1,6 @@
 import {useMemo, useState} from 'react';
+import {GaugeBribeModal} from 'apps/components/bribe/GaugeBribeModal';
+import {useBribes} from 'apps/useBribes';
 import {Button} from '@yearn-finance/web-lib/components/Button';
 import {Modal} from '@yearn-finance/web-lib/components/Modal';
 import {Renderable} from '@yearn-finance/web-lib/components/Renderable';
@@ -8,8 +10,6 @@ import {formatToNormalizedValue, toBigInt} from '@yearn-finance/web-lib/utils/fo
 import {formatAmount, formatPercent, formatUSD} from '@yearn-finance/web-lib/utils/format.number';
 import {ImageWithFallback} from '@common/components/ImageWithFallback';
 import {useTokenInfo} from '@common/hooks/useTokenInfo';
-import {GaugeBribeModal} from '@yBribe/components/bribe/GaugeBribeModal';
-import {useBribes} from '@yBribe/contexts/useBribes';
 
 import type {ReactElement} from 'react';
 import type {TAddress, TDict} from '@yearn-finance/web-lib/types';

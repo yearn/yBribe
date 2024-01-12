@@ -1,4 +1,4 @@
-import {useBribes} from '@yBribe/contexts/useBribes';
+import {useBribes} from 'apps/useBribes';
 
 import type {ReactElement} from 'react';
 

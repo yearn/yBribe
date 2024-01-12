@@ -1,7 +1,7 @@
 import {AnimatePresence, motion} from 'framer-motion';
 import {HeroTimer} from '@common/components/HeroTimer';
 import {variants} from '@common/utils/animations';
-import {getNextThursday} from '@yBribe/utils';
+import {getNextThursday} from '@yBribe/index';
 
 import type {NextRouter} from 'next/router';
 import type {ReactElement} from 'react';

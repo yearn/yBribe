@@ -1,6 +1,12 @@
 import {useCallback, useMemo, useState} from 'react';
 import {Balancer} from 'react-wrap-balancer';
 import Link from 'next/link';
+import {GaugeListEmpty} from 'apps/components/bribe/GaugeListEmpty';
+import {GaugeListRow} from 'apps/components/bribe/GaugeListRow';
+import {ListHead} from 'apps/components/ListHead';
+import {ListHero} from 'apps/components/ListHero';
+import {useBribes} from 'apps/useBribes';
+import {Wrapper} from 'apps/Wrapper';
 import {Button} from '@yearn-finance/web-lib/components/Button';
 import {Renderable} from '@yearn-finance/web-lib/components/Renderable';
 import {useSessionStorage} from '@yearn-finance/web-lib/hooks/useSessionStorage';
@@ -12,12 +18,6 @@ import {useCurve} from '@common/contexts/useCurve';
 import {useYearn} from '@common/contexts/useYearn';
 import {usePagination} from '@common/hooks/usePagination';
 import {stringSort} from '@common/utils/sort';
-import {GaugeListEmpty} from '@yBribe/components/bribe/GaugeListEmpty';
-import {GaugeListRow} from '@yBribe/components/bribe/GaugeListRow';
-import {ListHead} from '@yBribe/components/ListHead';
-import {ListHero} from '@yBribe/components/ListHero';
-import {useBribes} from '@yBribe/contexts/useBribes';
-import {Wrapper} from '@yBribe/Wrapper';
 
 import type {NextRouter} from 'next/router';
 import type {ReactElement, ReactNode} from 'react';

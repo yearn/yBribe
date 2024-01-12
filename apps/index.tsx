@@ -3,6 +3,8 @@ import dayjsDuration from 'dayjs/plugin/duration.js';
 import utc from 'dayjs/plugin/utc';
 import weekday from 'dayjs/plugin/weekday';
 
+export const YBRIBE_SUPPORTED_NETWORK = 1;
+
 extend(dayjsDuration);
 extend(weekday);
 extend(utc);

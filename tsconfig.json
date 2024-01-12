@@ -4,7 +4,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"@common/*": ["apps/common/*"],
-			"@yBribe/*": ["apps/ybribe/*"]
+			"@yBribe/*": ["apps/*"]
 		},
 		/* Basic Options */
 		"target": "esnext",
