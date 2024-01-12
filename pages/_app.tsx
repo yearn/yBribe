@@ -2,19 +2,21 @@ import React, {memo} from 'react';
 import localFont from 'next/font/local';
 import {useRouter} from 'next/router';
 import {BribesContextApp} from 'apps/useBribes';
+import {AnimatePresence, motion} from 'framer-motion';
 import {arbitrum, base, fantom, mainnet, optimism, polygon} from '@wagmi/chains';
 import {WithYearn} from '@yearn-finance/web-lib/contexts/WithYearn';
 import {cl} from '@yearn-finance/web-lib/utils/cl';
 import {localhost} from '@yearn-finance/web-lib/utils/wagmi/networks';
 import AppHeader from '@common/components/Header';
+import {HeroTimer} from '@common/components/HeroTimer';
 import Meta from '@common/components/Meta';
 import {CurveContextApp} from '@common/contexts/useCurve';
 import {WalletContextApp} from '@common/contexts/useWallet';
 import {YearnContextApp} from '@common/contexts/useYearn';
+import {variants} from '@common/utils/animations';
+import {getNextThursday} from '@yBribe/index';
 
-import type {NextComponentType} from 'next';
 import type {AppProps} from 'next/app';
-import type {NextRouter} from 'next/router';
 import type {ReactElement} from 'react';
 
 import '../style.css';
@@ -41,13 +43,9 @@ const aeonik = localFont({
 	]
 });
 
-type TGetLayout = NextComponentType & {
-	getLayout: (p: ReactElement, router: NextRouter) => ReactElement;
-};
 function AppWrapper(props: AppProps): ReactElement {
 	const router = useRouter();
 	const {Component, pageProps} = props;
-	const getLayout = (Component as TGetLayout).getLayout || ((page: ReactElement): ReactElement => page);
 
 	return (
 		<>
@@ -57,13 +55,23 @@ function AppWrapper(props: AppProps): ReactElement {
 				className={cl('mx-auto mb-0 flex font-aeonik')}>
 				<div className={'block h-full min-h-max w-full'}>
 					<AppHeader />
-					{getLayout(
-						<Component
-							router={props.router}
-							{...pageProps}
-						/>,
-						router
-					)}
+					<div className={'mx-auto my-0 max-w-6xl pt-4 md:mb-0 md:mt-16 md:!px-0'}>
+						<AnimatePresence mode={'wait'}>
+							<motion.div
+								key={router.asPath}
+								initial={'initial'}
+								animate={'enter'}
+								exit={'exit'}
+								className={'my-0 h-full md:mb-0 md:mt-16'}
+								variants={variants}>
+								<HeroTimer endTime={getNextThursday()} />
+								<Component
+									router={props.router}
+									{...pageProps}
+								/>
+							</motion.div>
+						</AnimatePresence>
+					</div>
 				</div>
 			</div>
 		</>

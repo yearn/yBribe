@@ -9,8 +9,8 @@ import {yDaemonPricesChainSchema} from '@common/schemas/yDaemonPricesSchema';
 import {Solver} from '@common/schemas/yDaemonTokenListBalances';
 import {yDaemonTokensChainSchema} from '@common/schemas/yDaemonTokensSchema';
 import {yDaemonVaultsSchema} from '@common/schemas/yDaemonVaultsSchemas';
-import {DEFAULT_MAX_LOSS, DEFAULT_SLIPPAGE} from '@common/utils/constants';
 import {useYDaemonBaseURI} from '@common/utils/getYDaemonBaseURI';
+import {DEFAULT_MAX_LOSS, DEFAULT_SLIPPAGE} from '@yBribe/index';
 
 import type {ReactElement} from 'react';
 import type {KeyedMutator} from 'swr';

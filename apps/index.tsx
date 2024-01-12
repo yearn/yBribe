@@ -4,6 +4,8 @@ import utc from 'dayjs/plugin/utc';
 import weekday from 'dayjs/plugin/weekday';
 
 export const YBRIBE_SUPPORTED_NETWORK = 1;
+export const DEFAULT_SLIPPAGE = 0.5;
+export const DEFAULT_MAX_LOSS = 1n;
 
 extend(dayjsDuration);
 extend(weekday);

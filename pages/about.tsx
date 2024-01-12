@@ -1,6 +1,3 @@
-import {Wrapper} from 'apps/Wrapper';
-
-import type {NextRouter} from 'next/router';
 import type {ReactElement} from 'react';
 
 function About(): ReactElement {
@@ -75,9 +72,5 @@ function About(): ReactElement {
 		</section>
 	);
 }
-
-About.getLayout = function getLayout(page: ReactElement, router: NextRouter): ReactElement {
-	return <Wrapper router={router}>{page}</Wrapper>;
-};
 
 export default About;

@@ -5,7 +5,6 @@ import {GaugeListRow} from 'apps/components/claim/GaugeListRow';
 import {ListHead} from 'apps/components/ListHead';
 import {ListHero} from 'apps/components/ListHero';
 import {useBribes} from 'apps/useBribes';
-import {Wrapper} from 'apps/Wrapper';
 import {Button} from '@yearn-finance/web-lib/components/Button';
 import {Renderable} from '@yearn-finance/web-lib/components/Renderable';
 import {useSessionStorage} from '@yearn-finance/web-lib/hooks/useSessionStorage';
@@ -18,7 +17,6 @@ import {useYearn} from '@common/contexts/useYearn';
 import {usePagination} from '@common/hooks/usePagination';
 import {stringSort} from '@common/utils/sort';
 
-import type {NextRouter} from 'next/router';
 import type {ReactElement, ReactNode} from 'react';
 import type {TAddress} from '@yearn-finance/web-lib/types';
 import type {TCurveGauge} from '@common/schemas/curveSchemas';
@@ -272,9 +270,5 @@ function Index(): ReactElement {
 		</>
 	);
 }
-
-Index.getLayout = function getLayout(page: ReactElement, router: NextRouter): ReactElement {
-	return <Wrapper router={router}>{page}</Wrapper>;
-};
 
 export default Index;
