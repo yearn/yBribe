@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import {useRouter} from 'next/router';
 import {BribesContextApp} from 'apps/useBribes';
 import {AnimatePresence, motion} from 'framer-motion';
+import {Analytics} from '@vercel/analytics/react';
 import {arbitrum, base, fantom, mainnet, optimism, polygon} from '@wagmi/chains';
 import {WithYearn} from '@yearn-finance/web-lib/contexts/WithYearn';
 import {cl} from '@yearn-finance/web-lib/utils/cl';
@@ -74,6 +75,7 @@ function AppWrapper(props: AppProps): ReactElement {
 					</div>
 				</div>
 			</div>
+			<Analytics />
 		</>
 	);
 }
