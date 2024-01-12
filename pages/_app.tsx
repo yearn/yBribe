@@ -1,6 +1,7 @@
 import React, {memo} from 'react';
 import localFont from 'next/font/local';
 import {useRouter} from 'next/router';
+import {BribesContextApp} from 'apps/useBribes';
 import {arbitrum, base, fantom, mainnet, optimism, polygon} from '@wagmi/chains';
 import {WithYearn} from '@yearn-finance/web-lib/contexts/WithYearn';
 import {cl} from '@yearn-finance/web-lib/utils/cl';
@@ -10,7 +11,6 @@ import Meta from '@common/components/Meta';
 import {CurveContextApp} from '@common/contexts/useCurve';
 import {WalletContextApp} from '@common/contexts/useWallet';
 import {YearnContextApp} from '@common/contexts/useYearn';
-import {BribesContextApp} from '@yBribe/contexts/useBribes';
 
 import type {NextComponentType} from 'next';
 import type {AppProps} from 'next/app';

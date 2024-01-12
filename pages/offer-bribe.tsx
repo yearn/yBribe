@@ -1,5 +1,4 @@
 import {useCallback, useMemo, useState} from 'react';
-import {Balancer} from 'react-wrap-balancer';
 import Link from 'next/link';
 import {GaugeListEmpty} from 'apps/components/bribe/GaugeListEmpty';
 import {GaugeListRow} from 'apps/components/bribe/GaugeListRow';
@@ -246,14 +245,12 @@ function OfferBribe(): ReactElement {
 	return (
 		<>
 			<div className={'mb-10 mt-8 w-full max-w-6xl text-center'}>
-				<Balancer>
-					<b className={'text-center text-lg md:text-2xl'}>{'Buy votes to boost emissions.'}</b>
-					<p className={'mt-8 whitespace-pre-line text-center text-base text-neutral-600'}>
-						{
-							'Offer a bribe to increase CRV emissions to your favorite Curve pool.\nJust like democracy, minus the suit and expense account.'
-						}
-					</p>
-				</Balancer>
+				<b className={'text-center text-lg md:text-2xl'}>{'Buy votes to boost emissions.'}</b>
+				<p className={'mt-8 whitespace-pre-line text-center text-base text-neutral-600'}>
+					{
+						'Offer a bribe to increase CRV emissions to your favorite Curve pool.\nJust like democracy, minus the suit and expense account.'
+					}
+				</p>
 			</div>
 			<div className={'mb-10 flex flex-row items-center justify-center space-x-4 md:mb-0 md:space-x-10'}>
 				<Link

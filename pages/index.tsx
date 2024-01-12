@@ -1,5 +1,4 @@
 import {useCallback, useMemo, useState} from 'react';
-import {Balancer} from 'react-wrap-balancer';
 import Link from 'next/link';
 import {GaugeListEmpty} from 'apps/components/claim/GaugeListEmpty';
 import {GaugeListRow} from 'apps/components/claim/GaugeListRow';
@@ -249,14 +248,12 @@ function Index(): ReactElement {
 	return (
 		<>
 			<div className={'mb-10 mt-8 w-full max-w-6xl text-center'}>
-				<Balancer>
-					<b className={'text-center text-lg md:text-2xl'}>{'Get more for your votes.'}</b>
-					<p className={'mt-8 whitespace-pre-line text-center text-base text-neutral-600'}>
-						{
-							"Sell your vote to the highest bidder by voting on the briber's gauge and claiming a reward.\nIt's like DC lobbying, but without the long lunches."
-						}
-					</p>
-				</Balancer>
+				<b className={'text-center text-lg md:text-2xl'}>{'Get more for your votes.'}</b>
+				<p className={'mt-8 whitespace-pre-line text-center text-base text-neutral-600'}>
+					{
+						"Sell your vote to the highest bidder by voting on the briber's gauge and claiming a reward.\nIt's like DC lobbying, but without the long lunches."
+					}
+				</p>
 			</div>
 			<div className={'mb-10 flex flex-row items-center justify-center space-x-4 md:mb-0 md:space-x-10'}>
 				<Link
