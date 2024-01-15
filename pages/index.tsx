@@ -1,7 +1,6 @@
 import {useCallback, useMemo, useState} from 'react';
 import Link from 'next/link';
 import {Button} from '@yearn-finance/web-lib/components/Button';
-import {Pagination} from '@yearn-finance/web-lib/components/Pagination';
 import {Renderable} from '@yearn-finance/web-lib/components/Renderable';
 import {useYearn} from '@yearn-finance/web-lib/contexts/useYearn';
 import {usePagination} from '@yearn-finance/web-lib/hooks/usePagination';
@@ -12,6 +11,7 @@ import {stringSort} from '@yearn-finance/web-lib/utils/helpers';
 import {isTAddress} from '@yearn-finance/web-lib/utils/isTAddress';
 import {GaugeListEmpty} from '@yBribe/components/claim/GaugeListEmpty';
 import {GaugeListRow} from '@yBribe/components/claim/GaugeListRow';
+import {Pagination} from '@yBribe/components/common/Pagination';
 import {ListHead} from '@yBribe/components/ListHead';
 import {ListHero} from '@yBribe/components/ListHero';
 import {useBribes} from '@yBribe/contexts/useBribes';
