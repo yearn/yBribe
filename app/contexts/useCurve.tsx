@@ -1,6 +1,6 @@
 import {createContext, useContext, useMemo} from 'react';
-import {useFetch} from '@yearn-finance/web-lib/hooks/useFetch';
-import {isZeroAddress} from '@yearn-finance/web-lib/utils/address';
+import {useFetch} from '@builtbymom/web3/hooks/useFetch';
+import {isZeroAddress} from '@builtbymom/web3/utils/tools.is';
 import {coinGeckoPricesSchema} from '@yearn-finance/web-lib/utils/schemas/coinGeckoSchemas';
 import {
 	curveAllGaugesSchema,

@@ -1,12 +1,10 @@
+import {assert, assertAddress} from '@builtbymom/web3/utils/assert';
+import {handleTx} from '@builtbymom/web3/utils/wagmi/provider';
 import {CURVE_BRIBE_V3_ABI} from '@yearn-finance/web-lib/utils/abi/curveBribeV3.abi';
-import {assert} from '@yearn-finance/web-lib/utils/assert';
 import {CURVE_BRIBE_V3_ADDRESS} from '@yearn-finance/web-lib/utils/constants';
-import {handleTx} from '@yearn-finance/web-lib/utils/wagmi/provider';
-import {assertAddress} from '@yearn-finance/web-lib/utils/wagmi/utils';
 
-import type {TAddress} from '@yearn-finance/web-lib/types';
-import type {TWriteTransaction} from '@yearn-finance/web-lib/utils/wagmi/provider';
-import type {TTxResponse} from '@yearn-finance/web-lib/utils/web3/transaction';
+import type {TAddress} from '@builtbymom/web3/types/address';
+import type {TTxResponse, TWriteTransaction} from '@builtbymom/web3/utils/wagmi';
 
 /* 🔵 - Yearn Finance **********************************************************
  ** claimReward is a _WRITE_ function that claims the rewards from the yBribe

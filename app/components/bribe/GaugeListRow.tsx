@@ -1,23 +1,22 @@
 import {useMemo, useState} from 'react';
+import {useWeb3} from '@builtbymom/web3/contexts/useWeb3';
+import {toAddress} from '@builtbymom/web3/utils';
+import {formatAmount, formatPercent, formatUSD, toBigInt, toNormalizedValue} from '@builtbymom/web3/utils/format';
 import {Button} from '@yearn-finance/web-lib/components/Button';
 import {ImageWithFallback} from '@yearn-finance/web-lib/components/ImageWithFallback';
 import {Modal} from '@yearn-finance/web-lib/components/Modal';
 import {Renderable} from '@yearn-finance/web-lib/components/Renderable';
-import {useWeb3} from '@yearn-finance/web-lib/contexts/useWeb3';
-import {toAddress} from '@yearn-finance/web-lib/utils/address';
-import {formatToNormalizedValue, toBigInt} from '@yearn-finance/web-lib/utils/format.bigNumber';
-import {formatAmount, formatPercent, formatUSD} from '@yearn-finance/web-lib/utils/format.number';
 import {GaugeBribeModal} from '@yBribe/components/bribe/GaugeBribeModal';
 import {useBribes} from '@yBribe/contexts/useBribes';
 import {useTokenInfo} from '@yBribe/hooks/useTokenInfo';
 
 import type {ReactElement} from 'react';
-import type {TAddress, TDict} from '@yearn-finance/web-lib/types';
 import type {TCurveGauge} from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
+import type {TAddress, TDict} from '@builtbymom/web3/types';
 
 function GaugeRowItemWithExtraData({address, value}: {address: TAddress; value: bigint}): ReactElement {
 	const token = useTokenInfo(address);
-	const bribeAmount = formatToNormalizedValue(toBigInt(value), token.decimals);
+	const bribeAmount = toNormalizedValue(toBigInt(value), token.decimals);
 	const bribeValue = bribeAmount * Number(token.price || 0);
 
 	return (
@@ -46,7 +45,7 @@ export function GaugeListRow({currentGauge}: {currentGauge: TCurveGauge}): React
 	}, [currentGauge.gauge, nextRewards]);
 
 	const gaugeRelativeWeight = useMemo((): number => {
-		return formatToNormalizedValue(toBigInt(currentGauge?.gauge_controller?.gauge_relative_weight), 18);
+		return toNormalizedValue(toBigInt(currentGauge?.gauge_controller?.gauge_relative_weight), 18);
 	}, [currentGauge]);
 
 	const currentRewardsForCurrentGaugeMap = Object.entries(currentRewardsForCurrentGauge || {}) || [];

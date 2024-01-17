@@ -1,20 +1,19 @@
 import {createContext, useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import {useAccount, useContractRead} from 'wagmi';
+import {useContractRead} from 'wagmi';
+import {useWeb3} from '@builtbymom/web3/contexts/useWeb3';
+import {useAsyncTrigger} from '@builtbymom/web3/hooks/useAsyncTrigger';
+import {decodeAsBigInt, isZero, toAddress, toBigInt} from '@builtbymom/web3/utils';
 import {multicall, prepareWriteContract} from '@wagmi/core';
-import {useWeb3} from '@yearn-finance/web-lib/contexts/useWeb3';
-import {useAsyncTrigger} from '@yearn-finance/web-lib/hooks/useAsyncTrigger';
 import {CURVE_BRIBE_V3_ABI} from '@yearn-finance/web-lib/utils/abi/curveBribeV3.abi';
 import {CURVE_BRIBE_V3_HELPER_ABI} from '@yearn-finance/web-lib/utils/abi/curveBribeV3Helper.abi';
-import {allowanceKey, toAddress} from '@yearn-finance/web-lib/utils/address';
+import {allowanceKey} from '@yearn-finance/web-lib/utils/address';
 import {CURVE_BRIBE_V3_ADDRESS, CURVE_BRIBE_V3_HELPER_ADDRESS} from '@yearn-finance/web-lib/utils/constants';
-import {decodeAsBigInt} from '@yearn-finance/web-lib/utils/decoder';
-import {toBigInt} from '@yearn-finance/web-lib/utils/format.bigNumber';
-import {isZero} from '@yearn-finance/web-lib/utils/isZero';
 import {useCurve} from '@yBribe/contexts/useCurve';
 import {getLastThursday, getNextThursday, YBRIBE_SUPPORTED_NETWORK} from '@yBribe/index';
 
-import type {TAddress, TDict, VoidPromiseFunction} from '@yearn-finance/web-lib/types';
 import type {TCurveGaugeVersionRewards} from '@yearn-finance/web-lib/types/curves';
+import type {TDict, VoidPromiseFunction} from '@builtbymom/web3/types';
+import type {TAddress} from '@builtbymom/web3/types/address';
 import type {PrepareWriteContractResult} from '@wagmi/core';
 
 export type TBribesContext = {
@@ -38,8 +37,7 @@ const defaultProps: TBribesContext = {
 
 const BribesContext = createContext<TBribesContext>(defaultProps);
 export const BribesContextApp = ({children}: {children: React.ReactElement}): React.ReactElement => {
-	const hasConnector = useAccount().connector !== undefined;
-	const {address, isActive} = useWeb3();
+	const {address, isActive, onSwitchChain} = useWeb3();
 	const {gauges} = useCurve();
 	const [currentRewards, set_currentRewards] = useState<TCurveGaugeVersionRewards>({});
 	const [nextRewards, set_nextRewards] = useState<TCurveGaugeVersionRewards>({});
@@ -280,8 +278,10 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 	 **	getBribes will start the process to retrieve the bribe information.
 	 ***************************************************************************/
 	const getBribes = useAsyncTrigger(async (): Promise<void> => {
-		if (!hasConnector) {
-			return;
+		try {
+			await onSwitchChain(YBRIBE_SUPPORTED_NETWORK);
+		} catch (error) {
+			/**/
 		}
 		const rewardsPerGauges = await getRewardsPerGauges();
 		const [rewardsPerUser, nextPeriodRewards] = await Promise.all([
@@ -291,7 +291,7 @@ export const BribesContextApp = ({children}: {children: React.ReactElement}): Re
 
 		assignBribes(rewardsPerUser);
 		assignNextRewards(nextPeriodRewards);
-	}, [hasConnector, getRewardsPerGauges, getRewardsPerUser, getNextPeriodRewards, assignBribes, assignNextRewards]);
+	}, [onSwitchChain, getRewardsPerGauges, getRewardsPerUser, getNextPeriodRewards, assignBribes, assignNextRewards]);
 
 	const onRefresh = useCallback(async (): Promise<void> => {
 		await getBribes();

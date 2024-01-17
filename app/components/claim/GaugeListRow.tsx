@@ -1,23 +1,29 @@
 import {useCallback, useMemo, useState} from 'react';
+import {useWeb3} from '@builtbymom/web3/contexts/useWeb3';
+import {
+	formatAmount,
+	formatPercent,
+	formatUSD,
+	isZero,
+	toAddress,
+	toBigInt,
+	toNormalizedValue
+} from '@builtbymom/web3/utils';
+import {defaultTxStatus} from '@builtbymom/web3/utils/wagmi';
 import {Button} from '@yearn-finance/web-lib/components/Button';
 import {ImageWithFallback} from '@yearn-finance/web-lib/components/ImageWithFallback';
 import {Renderable} from '@yearn-finance/web-lib/components/Renderable';
-import {useWeb3} from '@yearn-finance/web-lib/contexts/useWeb3';
 import {useYearn} from '@yearn-finance/web-lib/contexts/useYearn';
-import {toAddress} from '@yearn-finance/web-lib/utils/address';
 import {CRV_TOKEN_ADDRESS, CURVE_BRIBE_V3_ADDRESS} from '@yearn-finance/web-lib/utils/constants';
-import {formatToNormalizedValue, toBigInt} from '@yearn-finance/web-lib/utils/format.bigNumber';
-import {formatAmount, formatPercent, formatUSD} from '@yearn-finance/web-lib/utils/format.number';
-import {isZero} from '@yearn-finance/web-lib/utils/isZero';
-import {defaultTxStatus} from '@yearn-finance/web-lib/utils/web3/transaction';
 import {claimRewardV3} from '@yBribe/actions';
 import {useBribes} from '@yBribe/contexts/useBribes';
 import {useTokenInfo} from '@yBribe/hooks/useTokenInfo';
 import {YBRIBE_SUPPORTED_NETWORK} from '@yBribe/index';
 
 import type {ReactElement} from 'react';
-import type {TAddress, TDict} from '@yearn-finance/web-lib/types';
 import type {TCurveGauge} from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
+import type {TDict} from '@builtbymom/web3/types';
+import type {TAddress} from '@builtbymom/web3/types/address';
 
 function GaugeRowItemWithExtraData({
 	address,
@@ -29,7 +35,7 @@ function GaugeRowItemWithExtraData({
 	minDecimals?: number;
 }): ReactElement {
 	const token = useTokenInfo(address);
-	const bribeAmount = formatToNormalizedValue(toBigInt(value), token.decimals);
+	const bribeAmount = toNormalizedValue(toBigInt(value), token.decimals);
 	const bribeValue = bribeAmount * Number(token.price || 0);
 	return (
 		<div className={'flex h-auto flex-col items-end pt-0 md:h-14'}>
@@ -64,7 +70,7 @@ function GaugeRowItemAPR({address, value}: {address: TAddress; value: bigint}): 
 		if (isZero(tokenPrice) || isZero(crvPrice)) {
 			return 0;
 		}
-		return ((formatToNormalizedValue(value, decimals) * tokenPrice) / crvPrice) * 52 * 100;
+		return ((toNormalizedValue(value, decimals) * tokenPrice) / crvPrice) * 52 * 100;
 	}, [address, crvPrice, tokenPrice, tokens, value]);
 
 	return (

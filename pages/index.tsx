@@ -1,14 +1,11 @@
 import {useCallback, useMemo, useState} from 'react';
 import Link from 'next/link';
+import {useSessionStorage} from '@builtbymom/web3/hooks/useSessionStorage';
+import {isTAddress, stringSort, toAddress, toBigInt, toNormalizedValue} from '@builtbymom/web3/utils/';
 import {Button} from '@yearn-finance/web-lib/components/Button';
 import {Renderable} from '@yearn-finance/web-lib/components/Renderable';
 import {useYearn} from '@yearn-finance/web-lib/contexts/useYearn';
 import {usePagination} from '@yearn-finance/web-lib/hooks/usePagination';
-import {useSessionStorage} from '@yearn-finance/web-lib/hooks/useSessionStorage';
-import {toAddress} from '@yearn-finance/web-lib/utils/address';
-import {formatToNormalizedValue, toBigInt} from '@yearn-finance/web-lib/utils/format.bigNumber';
-import {stringSort} from '@yearn-finance/web-lib/utils/helpers';
-import {isTAddress} from '@yearn-finance/web-lib/utils/isTAddress';
 import {GaugeListEmpty} from '@yBribe/components/claim/GaugeListEmpty';
 import {GaugeListRow} from '@yBribe/components/claim/GaugeListRow';
 import {Pagination} from '@yBribe/components/common/Pagination';
@@ -18,8 +15,8 @@ import {useBribes} from '@yBribe/contexts/useBribes';
 import {useCurve} from '@yBribe/contexts/useCurve';
 
 import type {ReactElement, ReactNode} from 'react';
-import type {TAddress, TSortDirection} from '@yearn-finance/web-lib/types';
 import type {TCurveGauge} from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
+import type {TAddress, TSortDirection} from '@builtbymom/web3/types';
 
 function GaugeList(): ReactElement {
 	const {tokens, prices} = useYearn();
@@ -37,7 +34,7 @@ function GaugeList(): ReactElement {
 			const tokenInfo = tokens?.[address];
 			const tokenPrice = prices?.[address];
 			const decimals = tokenInfo?.decimals || 18;
-			const bribeAmount = formatToNormalizedValue(toBigInt(value), decimals);
+			const bribeAmount = toNormalizedValue(toBigInt(value), decimals);
 			const bribeValue = bribeAmount * (Number(tokenPrice || 0) / 100);
 			return bribeValue;
 		},

@@ -3,15 +3,15 @@ import localFont from 'next/font/local';
 import {useRouter} from 'next/router';
 import manifest from 'public/manifest.json';
 import {AnimatePresence, motion} from 'framer-motion';
+import {WalletContextApp} from '@builtbymom/web3/contexts/useWallet';
+import {WithMom} from '@builtbymom/web3/contexts/WithMom';
+import {motionVariants} from '@builtbymom/web3/utils';
+import {cl} from '@builtbymom/web3/utils/cl';
+import {localhost} from '@builtbymom/web3/utils/wagmi/networks';
 import {Analytics} from '@vercel/analytics/react';
 import {arbitrum, base, fantom, mainnet, optimism, polygon} from '@wagmi/chains';
 import Meta from '@yearn-finance/web-lib/components/Meta';
-import {WalletContextApp} from '@yearn-finance/web-lib/contexts/useWallet';
 import {YearnContextApp} from '@yearn-finance/web-lib/contexts/useYearn';
-import {WithYearn} from '@yearn-finance/web-lib/contexts/WithYearn';
-import {cl} from '@yearn-finance/web-lib/utils/cl';
-import {motionVariants} from '@yearn-finance/web-lib/utils/helpers';
-import {localhost} from '@yearn-finance/web-lib/utils/wagmi/networks';
 import AppHeader from '@yBribe/components/common/Header';
 import {HeroTimer} from '@yBribe/components/common/HeroTimer';
 import {BribesContextApp} from '@yBribe/contexts/useBribes';
@@ -102,17 +102,15 @@ const App = memo(function App(props: AppProps): ReactElement {
 
 	return (
 		<YearnContextApp>
-			<WalletContextApp>
-				<CurveContextApp>
-					<BribesContextApp>
-						<AppWrapper
-							Component={Component}
-							pageProps={pageProps}
-							router={props.router}
-						/>
-					</BribesContextApp>
-				</CurveContextApp>
-			</WalletContextApp>
+			<CurveContextApp>
+				<BribesContextApp>
+					<AppWrapper
+						Component={Component}
+						pageProps={pageProps}
+						router={props.router}
+					/>
+				</BribesContextApp>
+			</CurveContextApp>
 		</YearnContextApp>
 	);
 });
@@ -132,16 +130,17 @@ const App = memo(function App(props: AppProps): ReactElement {
 function MyApp(props: AppProps): ReactElement {
 	return (
 		<main className={cl('flex flex-col h-screen', aeonik.className)}>
-			<WithYearn
+			<WithMom
 				supportedChains={[mainnet, optimism, polygon, fantom, base, arbitrum, localhost]}
-				options={{
-					baseSettings: {
-						yDaemonBaseURI: process.env.YDAEMON_BASE_URI as string
-					},
-					ui: {shouldUseThemes: false}
-				}}>
-				<App {...props} />
-			</WithYearn>
+				tokenLists={
+					[
+						// 'https://raw.githubusercontent.com/SmolDapp/tokenLists/main/lists/yearn.json'
+					]
+				}>
+				<WalletContextApp>
+					<App {...props} />
+				</WalletContextApp>
+			</WithMom>
 		</main>
 	);
 }

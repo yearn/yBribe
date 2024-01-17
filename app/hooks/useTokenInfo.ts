@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {erc20ABI, useContractReads} from 'wagmi';
 import {useYearn} from '@yearn-finance/web-lib/contexts/useYearn';
 
-import type {TAddress} from '@yearn-finance/web-lib/types';
+import type {TAddress} from '@builtbymom/web3/types/address';
 
 function useTokenInfo(address: TAddress): {symbol: string; decimals: number; price: number; init: boolean} {
 	const {tokens, prices} = useYearn();
