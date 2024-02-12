@@ -1,6 +1,6 @@
 import {assert, assertAddress} from '@builtbymom/web3/utils/assert';
 import {handleTx} from '@builtbymom/web3/utils/wagmi/provider';
-import {CURVE_BRIBE_V3_ABI} from '@yearn-finance/web-lib/utils/abi/curveBribeV3.abi';
+import {CURVE_BRIBE_V3_ABI} from '@yearn-finance/web-lib/utils/abi/ybribe.curveBribeV3.abi';
 import {CURVE_BRIBE_V3_ADDRESS} from '@yearn-finance/web-lib/utils/constants';
 
 import type {TAddress} from '@builtbymom/web3/types/address';

@@ -4,10 +4,10 @@ import {useWeb3} from '@builtbymom/web3/contexts/useWeb3';
 import {useAsyncTrigger} from '@builtbymom/web3/hooks/useAsyncTrigger';
 import {decodeAsBigInt, isZero, toAddress, toBigInt} from '@builtbymom/web3/utils';
 import {multicall, prepareWriteContract} from '@wagmi/core';
-import {CURVE_BRIBE_V3_ABI} from '@yearn-finance/web-lib/utils/abi/curveBribeV3.abi';
-import {CURVE_BRIBE_V3_HELPER_ABI} from '@yearn-finance/web-lib/utils/abi/curveBribeV3Helper.abi';
-import {allowanceKey} from '@yearn-finance/web-lib/utils/address';
+import {CURVE_BRIBE_V3_ABI} from '@yearn-finance/web-lib/utils/abi/ybribe.curveBribeV3.abi';
+import {CURVE_BRIBE_V3_HELPER_ABI} from '@yearn-finance/web-lib/utils/abi/ybribe.curveBribeV3Helper.abi';
 import {CURVE_BRIBE_V3_ADDRESS, CURVE_BRIBE_V3_HELPER_ADDRESS} from '@yearn-finance/web-lib/utils/constants';
+import {allowanceKey} from '@yearn-finance/web-lib/utils/helpers';
 import {useCurve} from '@yBribe/contexts/useCurve';
 import {getLastThursday, getNextThursday, YBRIBE_SUPPORTED_NETWORK} from '@yBribe/index';
 

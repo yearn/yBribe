@@ -132,11 +132,10 @@ function MyApp(props: AppProps): ReactElement {
 		<main className={cl('flex flex-col h-screen', aeonik.className)}>
 			<WithMom
 				supportedChains={[mainnet, optimism, polygon, fantom, base, arbitrum, localhost]}
-				tokenLists={
-					[
-						// 'https://raw.githubusercontent.com/SmolDapp/tokenLists/main/lists/yearn.json'
-					]
-				}>
+				tokenLists={[
+					'https://raw.githubusercontent.com/SmolDapp/tokenLists/main/lists/yearn.json',
+					'https://raw.githubusercontent.com/SmolDapp/tokenLists/main/lists/curve.json'
+				]}>
 				<WalletContextApp>
 					<App {...props} />
 				</WalletContextApp>

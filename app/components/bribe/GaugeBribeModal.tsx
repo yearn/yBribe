@@ -12,7 +12,8 @@ import {
 	toAddress,
 	toBigInt,
 	toNormalizedBN,
-	toNormalizedValue
+	toNormalizedValue,
+	zeroNormalizedBN
 } from '@builtbymom/web3/utils';
 import {approveERC20, defaultTxStatus} from '@builtbymom/web3/utils/wagmi';
 import {Button} from '@yearn-finance/web-lib/components/Button';
@@ -54,7 +55,7 @@ export function GaugeBribeModal({
 	const {address, provider, isActive, openLoginModal} = useWeb3();
 	const {refresh} = useBribes();
 	const {prices} = useYearn();
-	const [amount, set_amount] = useState<TNormalizedBN>(toNormalizedBN(0));
+	const [amount, set_amount] = useState<TNormalizedBN>(zeroNormalizedBN);
 	const [tokenAddress, set_tokenAddress] = useState<TAddress | undefined>();
 	const [txStatusApprove, set_txStatusApprove] = useState(defaultTxStatus);
 	const [txStatusAddReward, set_txStatusAddReward] = useState(defaultTxStatus);
@@ -221,10 +222,9 @@ export function GaugeBribeModal({
 								/>
 								<button
 									onClick={(): void => {
-										set_amount({
-											raw: toBigInt(selectedToken?.raw),
-											normalized: selectedToken?.normalized || 0
-										});
+										if (selectedToken) {
+											set_amount(toNormalizedBN(selectedToken.raw, selectedToken.decimals));
+										}
 									}}
 									className={
 										'cursor-pointer bg-neutral-900 px-2 py-1 text-xs text-neutral-0 transition-colors hover:bg-neutral-700'
