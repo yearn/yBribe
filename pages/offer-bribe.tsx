@@ -249,7 +249,7 @@ function OfferBribe(): ReactElement {
 			</div>
 			<div className={'mb-10 flex flex-row items-center justify-center space-x-4 md:mb-0 md:space-x-10'}>
 				<Link
-					href={'https://dao.curve.fi/gaugeweight'}
+					href={'https://curve.fi/dao/#/ethereum/gauges'}
 					target={'_blank'}
 					className={'w-full md:w-auto'}>
 					<Button className={'w-full'}>{'Vote for Gauge'}</Button>
