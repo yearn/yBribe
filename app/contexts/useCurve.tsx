@@ -1,10 +1,8 @@
 import {createContext, useContext, useMemo} from 'react';
 import {useFetch} from '@builtbymom/web3/hooks/useFetch';
-import {isZeroAddress} from '@builtbymom/web3/utils/tools.is';
 import {coinGeckoPricesSchema} from '@yearn-finance/web-lib/utils/schemas/coinGeckoSchemas';
 import {
 	curveAllGaugesSchema,
-	curveGaugesFromYearnSchema,
 	curveWeeklyFeesSchema
 } from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
 
@@ -12,7 +10,6 @@ import type {TCoinGeckoPrices} from '@yearn-finance/web-lib/utils/schemas/coinGe
 import type {
 	TCurveAllGauges,
 	TCurveGauge,
-	TCurveGaugesFromYearn,
 	TCurveWeeklyFees
 } from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
 
@@ -21,7 +18,6 @@ export type TCurveContext = {
 	cgPrices: TCoinGeckoPrices;
 	gauges: TCurveGauge[];
 	isLoadingGauges: boolean;
-	gaugesFromYearn: TCurveGaugesFromYearn;
 };
 
 const defaultProps: TCurveContext = {
@@ -34,7 +30,6 @@ const defaultProps: TCurveContext = {
 	cgPrices: {},
 	gauges: [],
 	isLoadingGauges: false,
-	gaugesFromYearn: []
 };
 
 const CurveContext = createContext<TCurveContext>(defaultProps);
@@ -60,11 +55,6 @@ export const CurveContextApp = ({children}: {children: React.ReactElement}): Rea
 	const {data: gaugesWrapper, isLoading: isLoadingGauges} = useFetch<TCurveAllGauges>({
 		endpoint: 'https://api.curve.fi/api/getAllGauges?blockchainId=ethereum',
 		schema: curveAllGaugesSchema
-	});
-
-	const {data: gaugesFromYearn} = useFetch<TCurveGaugesFromYearn>({
-		endpoint: 'https://api.yexporter.io/v1/chains/1/apy-previews/curve-factory',
-		schema: curveGaugesFromYearnSchema
 	});
 
 	const gauges = useMemo((): TCurveGauge[] => {
@@ -93,11 +83,8 @@ export const CurveContextApp = ({children}: {children: React.ReactElement}): Rea
 			cgPrices: cgPrices || defaultProps.cgPrices,
 			gauges: gauges || defaultProps.gauges,
 			isLoadingGauges: isLoadingGauges || defaultProps.isLoadingGauges,
-			gaugesFromYearn: (gaugesFromYearn || defaultProps.gaugesFromYearn).filter(
-				(props): boolean => !isZeroAddress(props.gauge_address)
-			)
 		}),
-		[curveWeeklyFees, cgPrices, gauges, isLoadingGauges, gaugesFromYearn]
+		[curveWeeklyFees, cgPrices, gauges, isLoadingGauges]
 	);
 
 	return <CurveContext.Provider value={contextValue}>{children}</CurveContext.Provider>;
