@@ -77,7 +77,7 @@ export function GaugeListRow({currentGauge}: {currentGauge: TCurveGauge}): React
 					</div>
 					<p>{currentGauge.name}</p>
 				</div>
-				<div className={'flex md:hidden'}>
+				{/* <div className={'flex max-md:hidden'}>
 					<div className={'h-16 pt-4 md:pt-7'}>
 						<Button
 							className={'yearn--button-smaller w-full'}
@@ -86,7 +86,7 @@ export function GaugeListRow({currentGauge}: {currentGauge: TCurveGauge}): React
 							{'Bribe'}
 						</Button>
 					</div>
-				</div>
+				</div> */}
 			</div>
 
 			<div className={'yearn--table-data-section col-span-8'}>

@@ -1,17 +1,10 @@
 import {createContext, useContext, useMemo} from 'react';
 import {useFetch} from '@builtbymom/web3/hooks/useFetch';
 import {coinGeckoPricesSchema} from '@yearn-finance/web-lib/utils/schemas/coinGeckoSchemas';
-import {
-	curveAllGaugesSchema,
-	curveWeeklyFeesSchema
-} from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
+import {curveAllGaugesSchema, curveWeeklyFeesSchema} from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
 
 import type {TCoinGeckoPrices} from '@yearn-finance/web-lib/utils/schemas/coinGeckoSchemas';
-import type {
-	TCurveAllGauges,
-	TCurveGauge,
-	TCurveWeeklyFees
-} from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
+import type {TCurveAllGauges, TCurveGauge, TCurveWeeklyFees} from '@yearn-finance/web-lib/utils/schemas/curveSchemas';
 
 export type TCurveContext = {
 	curveWeeklyFees: TCurveWeeklyFees['data'];
@@ -29,7 +22,7 @@ const defaultProps: TCurveContext = {
 	},
 	cgPrices: {},
 	gauges: [],
-	isLoadingGauges: false,
+	isLoadingGauges: false
 };
 
 const CurveContext = createContext<TCurveContext>(defaultProps);
@@ -82,7 +75,7 @@ export const CurveContextApp = ({children}: {children: React.ReactElement}): Rea
 			curveWeeklyFees: curveWeeklyFees?.data || defaultProps.curveWeeklyFees,
 			cgPrices: cgPrices || defaultProps.cgPrices,
 			gauges: gauges || defaultProps.gauges,
-			isLoadingGauges: isLoadingGauges || defaultProps.isLoadingGauges,
+			isLoadingGauges: isLoadingGauges || defaultProps.isLoadingGauges
 		}),
 		[curveWeeklyFees, cgPrices, gauges, isLoadingGauges]
 	);

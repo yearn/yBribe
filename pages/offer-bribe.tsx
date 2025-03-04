@@ -22,7 +22,6 @@ function GaugeList(): ReactElement {
 	const {tokens, prices} = useYearn();
 	const {gauges} = useCurve();
 	const {currentRewards, nextRewards} = useBribes();
-	const [category, set_category] = useState('all');
 	const [searchValue, set_searchValue] = useState('');
 	const [sort, set_sort] = useSessionStorage<{
 		sortBy: string;
@@ -44,20 +43,8 @@ function GaugeList(): ReactElement {
 		[prices, tokens]
 	);
 
-	const standardGauges = useMemo((): TCurveGauge[] => gauges.filter((gauge): boolean => !gauge.factory), [gauges]);
-	const factoryGauges = useMemo((): TCurveGauge[] => gauges.filter((gauge): boolean => gauge.factory), [gauges]);
-	const filteredGauges = useMemo((): TCurveGauge[] => {
-		if (category === 'standard') {
-			return standardGauges;
-		}
-		if (category === 'factory') {
-			return factoryGauges;
-		}
-		return gauges;
-	}, [category, gauges, factoryGauges, standardGauges]);
-
 	const searchedGauges = useMemo((): TCurveGauge[] => {
-		const gaugesToSearch = [...filteredGauges];
+		const gaugesToSearch = [...gauges];
 
 		if (searchValue === '') {
 			return gaugesToSearch;
@@ -72,7 +59,7 @@ function GaugeList(): ReactElement {
 				.split(' ');
 			return allSearchWords.every((word): boolean => info.some((v): boolean => v.startsWith(word)));
 		});
-	}, [filteredGauges, searchValue]);
+	}, [gauges, searchValue]);
 
 	const sortedGauges = useMemo((): TCurveGauge[] => {
 		if (sort.sortBy === 'name') {
@@ -155,27 +142,7 @@ function GaugeList(): ReactElement {
 			<div className={'col-span-12 flex w-full flex-col bg-neutral-100'}>
 				<ListHero
 					headLabel={'Offer Bribe'}
-					searchPlaceholder={`Search ${category}`}
-					categories={[
-						[
-							{
-								value: 'standard',
-								label: 'Standard',
-								isSelected: category === 'standard'
-							},
-							{
-								value: 'factory',
-								label: 'Factory',
-								isSelected: category === 'factory'
-							},
-							{
-								value: 'all',
-								label: 'All',
-								isSelected: category === 'all'
-							}
-						]
-					]}
-					onSelect={set_category}
+					searchPlaceholder={`Search`}
 					searchValue={searchValue}
 					set_searchValue={set_searchValue}
 				/>

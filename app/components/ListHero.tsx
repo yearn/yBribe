@@ -22,8 +22,8 @@ type TListHero<T> = {
 	headLabel: string;
 	switchProps?: TSwitchProps;
 	searchPlaceholder: string;
-	categories: TListHeroCategory<T>[][];
-	onSelect: (category: T) => void;
+	categories?: TListHeroCategory<T>[][];
+	onSelect?: (category: T) => void;
 	selectedChains?: string;
 	set_selectedChains?: (chains: string) => void;
 	searchValue: string;
@@ -97,11 +97,12 @@ export function ListHero<T extends string>({
 			</div>
 
 			<div className={'hidden w-full flex-row items-center justify-between space-x-4 md:flex'}>
-				<DesktopCategories
-					categories={categories}
-					onSelect={onSelect}
-				/>
-
+				{categories && onSelect && (
+					<DesktopCategories
+						categories={categories}
+						onSelect={onSelect}
+					/>
+				)}
 				<SearchBar
 					searchPlaceholder={searchPlaceholder}
 					searchValue={searchValue}
@@ -110,34 +111,36 @@ export function ListHero<T extends string>({
 			</div>
 
 			<div className={'flex w-full flex-row space-x-2 md:hidden md:w-2/3'}>
-				<select
-					suppressHydrationWarning
-					className={'yearn--button-smaller text-neutral-0 !w-[120%] border-none bg-neutral-900'}
-					onChange={({target: {value}}): void => {
-						if (isValidCategory<T>(value)) {
-							onSelect(value);
-						}
-					}}>
-					{isMounted() &&
-						categories.map(
-							(currentCategory): ReactNode =>
-								currentCategory.map(
-									(item): ReactElement => (
-										<option
-											suppressHydrationWarning
-											key={item.value}
-											value={item.value}>
-											{item.label}
-										</option>
+				{categories && onSelect && (
+					<select
+						suppressHydrationWarning
+						className={'yearn--button-smaller !w-[120%] border-none bg-neutral-900 text-neutral-0'}
+						onChange={({target: {value}}): void => {
+							if (isValidCategory<T>(value)) {
+								onSelect(value);
+							}
+						}}>
+						{isMounted() &&
+							categories.map(
+								(currentCategory): ReactNode =>
+									currentCategory.map(
+										(item): ReactElement => (
+											<option
+												suppressHydrationWarning
+												key={item.value}
+												value={item.value}>
+												{item.label}
+											</option>
+										)
 									)
-								)
-						)}
-				</select>
-				<div className={'border-neutral-0 bg-neutral-0 flex h-8 w-full items-center border p-2 md:w-auto'}>
+							)}
+					</select>
+				)}
+				<div className={'flex h-8 w-full items-center border border-neutral-0 bg-neutral-0 p-2 md:w-auto'}>
 					<div className={'flex h-8 w-full flex-row items-center justify-between px-0 py-2'}>
 						<input
 							className={
-								'scrollbar-none w-full overflow-x-scroll border-none bg-transparent px-0 py-2 text-xs outline-none'
+								'w-full overflow-x-scroll border-none bg-transparent px-0 py-2 text-xs outline-none scrollbar-none'
 							}
 							type={'text'}
 							placeholder={'Search'}
